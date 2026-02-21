@@ -1,0 +1,20 @@
+import { Metadata } from "next";
+import DafSubPage from "@/components/pages/DafSubPage";
+import { buildStrapiMetadata } from "@/lib/metadata";
+import { getDafSubContent } from "@/lib/content/daf-sub";
+
+const content = getDafSubContent("es", "metier")!;
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildStrapiMetadata({
+    endpoint: "daf-metier-page",
+    locale: "es",
+    path: "/externalizacion-daf/metier",
+    fallbackTitle: "Ficha de puesto CFO | Iter Advisors",
+    fallbackDescription: "Ficha de puesto del Director Administrativo y Financiero.",
+  });
+}
+
+export default function Page() {
+  return <DafSubPage locale="es" content={content} />;
+}

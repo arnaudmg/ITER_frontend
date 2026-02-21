@@ -1,0 +1,17 @@
+import { Metadata } from "next";
+import ServicesPage from "@/components/pages/ServicesPage";
+import { buildStrapiMetadata } from "@/lib/metadata";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return buildStrapiMetadata({
+    endpoint: "services-page",
+    locale: "fr",
+    path: "/services",
+    fallbackTitle: "Services | Iter Advisors",
+    fallbackDescription: "Nos services de direction financière externalisée.",
+  });
+}
+
+export default function Page() {
+  return <ServicesPage locale="fr" />;
+}

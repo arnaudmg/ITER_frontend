@@ -1,0 +1,108 @@
+import { Locale } from "../i18n";
+
+export interface JobListing {
+  title: string;
+  href: string;
+}
+
+export interface JobsContent {
+  meta: {
+    title: string;
+    description: string;
+  };
+  hero: {
+    h1: string;
+  };
+  intro: string;
+  about: {
+    heading: string;
+    paragraph: string;
+  };
+  jobs: JobListing[];
+  discoverLabel: string;
+}
+
+const jobsFr: JobsContent = {
+  meta: {
+    title: "Jobs | Iter Advisors",
+    description:
+      "Rejoignez Iter Advisors ! D\u00e9couvrez nos offres d\u2019emploi en finance : CFO, analyste, manager et marketing.",
+  },
+  hero: {
+    h1: "Iter Advisors recrute",
+  },
+  intro:
+    "Vous souhaitez \u00eatre en charge de la gestion financi\u00e8re de plusieurs entreprises, accompagner des entrepreneurs talentueux dans un cadre pluridisciplinaire\u00a0? Rejoignez-nous\u00a0!",
+  about: {
+    heading: "\u00c0 propos de nous",
+    paragraph:
+      "Iter Advisors est une soci\u00e9t\u00e9 de conseil financier en pleine croissance. Nous rejoindre, c\u2019est int\u00e9grer un environnement international et multiculturel avec l\u2019opportunit\u00e9 de partager l\u2019aventure du lancement d\u2019une start-up avec nous.",
+  },
+  jobs: [
+    { title: "Fractional CFO (Startups)", href: "/jobs/fractional-cfo-startups" },
+    { title: "Senior Finance Manager", href: "/jobs/senior-finance-manager" },
+    { title: "Finance Analyst (Junior) FR", href: "/jobs/finance-analyst-junior-fr" },
+    { title: "Marketing & Growth Strategy", href: "/jobs/marketing-growth-strategy" },
+  ],
+  discoverLabel: "D\u00e9couvrir",
+};
+
+const jobsEn: JobsContent = {
+  meta: {
+    title: "Jobs | Iter Advisors",
+    description:
+      "Join Iter Advisors! Discover our finance job openings: CFO, analyst, manager and marketing.",
+  },
+  hero: {
+    h1: "Iter Advisors is recruiting",
+  },
+  intro:
+    "Would you like to be in charge of the financial management of several companies, supporting talented entrepreneurs in a multidisciplinary environment? Then join us!",
+  about: {
+    heading: "About us",
+    paragraph:
+      "Iter Advisors is a fast-growing financial advisory firm. Joining us means joining an international, multicultural environment, with the opportunity to share in the adventure of launching a start-up with us.",
+  },
+  jobs: [
+    { title: "Finance Analyst (Junior) FR", href: "/en/jobs/finance-analyst-junior-fr" },
+    { title: "Fractional CFO (Startups)", href: "/en/jobs/fractional-cfo-startups" },
+    { title: "Marketing & Growth Strategy", href: "/en/jobs/marketing-growth-strategy" },
+    { title: "Senior Finance Manager", href: "/en/jobs/senior-finance-manager" },
+  ],
+  discoverLabel: "Discover",
+};
+
+const jobsEs: JobsContent = {
+  meta: {
+    title: "Jobs | Iter Advisors",
+    description:
+      "Unase a Iter Advisors. Descubra nuestras ofertas de empleo en finanzas: CFO, analista, manager y marketing.",
+  },
+  hero: {
+    h1: "Iter Advisors est\u00e1 contratando",
+  },
+  intro:
+    "\u00bfLe gustar\u00eda encargarse de la gesti\u00f3n financiera de varias empresas, apoyando a empresarios con talento en un entorno multidisciplinar? \u00a1\u00danase a nosotros!",
+  about: {
+    heading: "Sobre nosotros",
+    paragraph:
+      "Iter Advisors es una empresa de asesoramiento financiero en r\u00e1pido crecimiento. Unirse a nosotros significa integrarse en un entorno internacional y multicultural, con la oportunidad de compartir la aventura de lanzar una start-up con nosotros.",
+  },
+  jobs: [
+    { title: "Analista financiero (Junior) FR", href: "/es/jobs/finance-analyst-junior-fr" },
+    { title: "Director Financiero Externo (Startups)", href: "/es/jobs/fractional-cfo-startups" },
+    { title: "Marketing y Estrategia de Crecimiento", href: "/es/jobs/marketing-growth-strategy" },
+    { title: "Director Financiero Senior", href: "/es/jobs/senior-finance-manager" },
+  ],
+  discoverLabel: "Descubra",
+};
+
+export const jobsContent: Record<Locale, JobsContent> = {
+  fr: jobsFr,
+  en: jobsEn,
+  es: jobsEs,
+};
+
+export function getJobsContent(locale: Locale): JobsContent {
+  return jobsContent[locale];
+}
