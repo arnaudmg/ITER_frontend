@@ -23,9 +23,14 @@ export default function DafPage({ locale }: { locale: Locale }) {
       <section className="bg-background pt-32 pb-16">
         <div className="container">
           <Breadcrumb locale={locale} items={[{ label: t.breadcrumbLabel }]} />
-          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">{t.h1}</h1>
+          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">
+            {t.h1}
+          </h1>
           {t.intro.map((paragraph, i) => (
-            <p key={i} className="text-lg text-muted-foreground max-w-2xl leading-relaxed mb-3">
+            <p
+              key={i}
+              className="text-lg text-muted-foreground max-w-2xl leading-relaxed mb-3"
+            >
               {paragraph}
             </p>
           ))}
@@ -43,32 +48,57 @@ export default function DafPage({ locale }: { locale: Locale }) {
       <section className="bg-background py-16 lg:py-20">
         <div className="container max-w-3xl">
           <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
-            {locale === "fr" ? "Votre partenaire" : locale === "en" ? "Your partner" : "Su socio"}
+            {locale === "fr"
+              ? "Votre partenaire"
+              : locale === "en"
+                ? "Your partner"
+                : "Su socio"}
           </span>
-          <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-6">{t.partnerSection.heading}</h2>
+          <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-6">
+            {t.partnerSection.heading}
+          </h2>
           {t.partnerSection.content.map((p, i) => (
-            <p key={i} className="text-muted-foreground leading-relaxed mb-4">{p}</p>
+            <p key={i} className="text-muted-foreground leading-relaxed mb-4">
+              {p}
+            </p>
           ))}
         </div>
       </section>
 
-      <div className="container"><div className="border-b border-border/50" /></div>
+      <div className="container">
+        <div className="border-b border-border/50" />
+      </div>
 
       {/* What Is */}
       <section className="bg-muted/30 py-24 lg:py-32">
         <div className="container max-w-3xl">
           <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
-            {locale === "fr" ? "Comprendre" : locale === "en" ? "Understand" : "Comprender"}
+            {locale === "fr"
+              ? "Comprendre"
+              : locale === "en"
+                ? "Understand"
+                : "Comprender"}
           </span>
-          <h2 className="text-3xl lg:text-4xl font-bold font-heading text-foreground mb-6">{t.whatIs.heading}</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold font-heading text-foreground mb-6">
+            {t.whatIs.heading}
+          </h2>
           {t.whatIs.content.map((p, i) => (
-            <p key={i} className="text-muted-foreground leading-relaxed mb-4">{p}</p>
+            <p key={i} className="text-muted-foreground leading-relaxed mb-4">
+              {p}
+            </p>
           ))}
           {t.whatIs.subsections?.map((sub, i) => (
             <div key={i} className="mt-10">
-              <h3 className="text-lg font-semibold font-heading text-foreground mb-4">{sub.heading}</h3>
+              <h3 className="text-lg font-semibold font-heading text-foreground mb-4">
+                {sub.heading}
+              </h3>
               {sub.content.map((p, j) => (
-                <p key={j} className="text-muted-foreground leading-relaxed mb-4">{p}</p>
+                <p
+                  key={j}
+                  className="text-muted-foreground leading-relaxed mb-4"
+                >
+                  {p}
+                </p>
               ))}
             </div>
           ))}
@@ -76,15 +106,23 @@ export default function DafPage({ locale }: { locale: Locale }) {
       </section>
 
       {/* Advantages */}
-      <section className="bg-background py-24 lg:py-32">
+      <section className="bg-background py-24 lg:py-16">
         <div className="container">
           <div className="max-w-3xl mb-10">
             <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
-              {locale === "fr" ? "Avantages" : locale === "en" ? "Advantages" : "Ventajas"}
+              {locale === "fr"
+                ? "Avantages"
+                : locale === "en"
+                  ? "Advantages"
+                  : "Ventajas"}
             </span>
-            <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-6">{t.advantages.heading}</h2>
+            <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-6">
+              {t.advantages.heading}
+            </h2>
             {t.advantages.content.map((p, i) => (
-              <p key={i} className="text-muted-foreground leading-relaxed mb-4">{p}</p>
+              <p key={i} className="text-muted-foreground leading-relaxed mb-4">
+                {p}
+              </p>
             ))}
           </div>
           <div className="grid md:grid-cols-2 gap-4 max-w-4xl">
@@ -100,7 +138,12 @@ export default function DafPage({ locale }: { locale: Locale }) {
                   {sub.heading}
                 </h3>
                 {sub.content.map((p, j) => (
-                  <p key={j} className="text-sm text-muted-foreground leading-relaxed">{p}</p>
+                  <p
+                    key={j}
+                    className="text-sm text-muted-foreground leading-relaxed"
+                  >
+                    {p}
+                  </p>
                 ))}
               </div>
             ))}
@@ -108,17 +151,27 @@ export default function DafPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <div className="container"><div className="border-b border-border/50" /></div>
+      <div className="container">
+        <div className="border-b border-border/50" />
+      </div>
 
       {/* Missions */}
       <section className="bg-muted/30 py-24 lg:py-32">
         <div className="container max-w-3xl">
           <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
-            {locale === "fr" ? "Nos missions" : locale === "en" ? "Our missions" : "Nuestras misiones"}
+            {locale === "fr"
+              ? "Nos missions"
+              : locale === "en"
+                ? "Our missions"
+                : "Nuestras misiones"}
           </span>
-          <h2 className="text-3xl lg:text-4xl font-bold font-heading text-foreground mb-6">{t.missions.heading}</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold font-heading text-foreground mb-6">
+            {t.missions.heading}
+          </h2>
           {t.missions.content.map((p, i) => (
-            <p key={i} className="text-muted-foreground leading-relaxed mb-4">{p}</p>
+            <p key={i} className="text-muted-foreground leading-relaxed mb-4">
+              {p}
+            </p>
           ))}
         </div>
       </section>
@@ -126,30 +179,46 @@ export default function DafPage({ locale }: { locale: Locale }) {
       <TestimonialsSection locale={locale} />
 
       {/* Why Choose */}
-      <section className="bg-background py-24 lg:py-32">
+      <section className="bg-background py-24 lg:py-16">
         <div className="container max-w-3xl">
           <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
-            {locale === "fr" ? "Pourquoi nous" : locale === "en" ? "Why us" : "Por qué nosotros"}
+            {locale === "fr"
+              ? "Pourquoi nous"
+              : locale === "en"
+                ? "Why us"
+                : "Por qué nosotros"}
           </span>
-          <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-6">{t.whyChoose.heading}</h2>
+          <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-6">
+            {t.whyChoose.heading}
+          </h2>
           {t.whyChoose.content.map((p, i) => (
-            <p key={i} className="text-muted-foreground leading-relaxed mb-4">{p}</p>
+            <p key={i} className="text-muted-foreground leading-relaxed mb-4">
+              {p}
+            </p>
           ))}
         </div>
       </section>
 
-      <div className="container"><div className="border-b border-border/50" /></div>
+      <div className="container">
+        <div className="border-b border-border/50" />
+      </div>
 
       {/* FAQ */}
       <section className="bg-muted/30 py-24 lg:py-32">
         <div className="container">
           <div className="text-center max-w-xl mx-auto mb-14">
-            <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">FAQ</span>
+            <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
+              FAQ
+            </span>
             <h2 className="text-3xl lg:text-4xl font-bold font-heading">FAQ</h2>
           </div>
           <div className="max-w-3xl mx-auto space-y-3">
             {t.faq.map((item, i) => (
-              <FaqAccordionItem key={i} question={item.question} answer={item.answer} />
+              <FaqAccordionItem
+                key={i}
+                question={item.question}
+                answer={item.answer}
+              />
             ))}
           </div>
         </div>
@@ -160,7 +229,13 @@ export default function DafPage({ locale }: { locale: Locale }) {
   );
 }
 
-function FaqAccordionItem({ question, answer }: { question: string; answer: string }) {
+function FaqAccordionItem({
+  question,
+  answer,
+}: {
+  question: string;
+  answer: string;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -184,7 +259,9 @@ function FaqAccordionItem({ question, answer }: { question: string; answer: stri
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="px-6 pb-6 text-muted-foreground leading-relaxed">{answer}</div>
+            <div className="px-6 pb-6 text-muted-foreground leading-relaxed">
+              {answer}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

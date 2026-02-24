@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import GlossairePage from "@/components/pages/GlossairePage";
 import { buildMetadata } from "@/lib/metadata";
+import { getGlossaryTerms } from "@/lib/strapi";
 
 export const metadata: Metadata = buildMetadata({
   locale: "es",
@@ -9,6 +10,7 @@ export const metadata: Metadata = buildMetadata({
   path: "/ressources/glossaire",
 });
 
-export default function Page() {
-  return <GlossairePage locale="es" />;
+export default async function Page() {
+  const terms = await getGlossaryTerms("es");
+  return <GlossairePage locale="es" terms={terms} />;
 }

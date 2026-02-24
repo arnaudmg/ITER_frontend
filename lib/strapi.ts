@@ -7,17 +7,21 @@ import { Locale } from "@/lib/i18n";
 
 // ─── Config ───────────────────────────────────────────────
 
-const STRAPI_URL = process.env.STRAPI_API_URL || "http://localhost:1337";
+// API base URL: Strapi REST API is at the root, not under /admin
+const rawStrapiUrl = process.env.STRAPI_API_URL || "http://localhost:1337";
+const STRAPI_URL = rawStrapiUrl.replace(/\/admin\/?$/, "") || rawStrapiUrl;
 const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || "";
 
-/** Map front-end locale codes to Strapi Cloud locale codes */
-const STRAPI_LOCALE_MAP: Record<string, string> = {
-  fr: "fr-FR",
-  es: "es-ES",
-  en: "en",
-};
+const isLocalStrapi =
+  typeof STRAPI_URL === "string" &&
+  (STRAPI_URL.includes("localhost") || STRAPI_URL.includes("127.0.0.1"));
+
+/** Map front-end locale to Strapi API locale. */
 function toStrapiLocale(locale: string): string {
-  return STRAPI_LOCALE_MAP[locale] || locale;
+  if (isLocalStrapi) return locale;
+  // Strapi Cloud uses fr-FR, es-ES; backend uses fr, es
+  const cloud: Record<string, string> = { fr: "fr-FR", en: "en", es: "es" };
+  return cloud[locale] ?? locale;
 }
 
 // ─── Types ────────────────────────────────────────────────
@@ -175,6 +179,74 @@ export interface StrapiServiceDetail {
   seo: StrapiSeo;
 }
 
+/** Single-type service pages (one Strapi single type per service) */
+export interface StrapiServiceSinglePage {
+  heroTitle: string;
+  heroSubtitle?: string;
+  content: StrapiBlock[];
+  faq: StrapiFaqItem[];
+  seo: StrapiSeo;
+}
+
+export const SERVICE_PAGE_SLUGS = [
+  "previsionnel-tresorerie",
+  "gestion-financiere-externalisee",
+  "accompagnement-levee-de-fond",
+  "comptabilite-externalisation",
+  "controle-de-gestion-externalise",
+] as const;
+
+export type ServicePageSlug = (typeof SERVICE_PAGE_SLUGS)[number];
+
+export const SERVICE_PAGE_API_MAP: Record<ServicePageSlug, string> = {
+  "previsionnel-tresorerie": "previsionnel-tresorerie-page",
+  "gestion-financiere-externalisee": "gestion-financiere-externalisee-page",
+  "accompagnement-levee-de-fond": "accompagnement-levee-de-fond-page",
+  "comptabilite-externalisation": "comptabilite-externalisation-page",
+  "controle-de-gestion-externalise": "controle-de-gestion-externalise-page",
+};
+
+/** URL slug per locale (FR = canonical; EN/ES = localized slugs) */
+export const SERVICE_URL_SLUG_BY_LOCALE: Record<Locale, Record<ServicePageSlug, string>> = {
+  fr: {
+    "previsionnel-tresorerie": "previsionnel-tresorerie",
+    "gestion-financiere-externalisee": "gestion-financiere-externalisee",
+    "accompagnement-levee-de-fond": "accompagnement-levee-de-fond",
+    "comptabilite-externalisation": "comptabilite-externalisation",
+    "controle-de-gestion-externalise": "controle-de-gestion-externalise",
+  },
+  en: {
+    "previsionnel-tresorerie": "cash-flow-forecast",
+    "gestion-financiere-externalisee": "outsourced-financial-management",
+    "accompagnement-levee-de-fond": "fund-raising-support",
+    "comptabilite-externalisation": "outsource-your-accounting",
+    "controle-de-gestion-externalise": "outsourced-management-control",
+  },
+  es: {
+    "previsionnel-tresorerie": "prevision-tesoreria",
+    "gestion-financiere-externalisee": "gestion-financiera-externalizada",
+    "accompagnement-levee-de-fond": "soporte-financiacion",
+    "comptabilite-externalisation": "externalizar-contabilidad",
+    "controle-de-gestion-externalise": "control-gestion-externalizado",
+  },
+};
+
+/** Resolve URL slug (from route) to canonical slug for API. */
+export function getCanonicalServiceSlug(locale: Locale, urlSlug: string): ServicePageSlug | null {
+  if (locale === "fr") {
+    return (SERVICE_PAGE_SLUGS as readonly string[]).includes(urlSlug) ? (urlSlug as ServicePageSlug) : null;
+  }
+  for (const canonical of SERVICE_PAGE_SLUGS) {
+    if (SERVICE_URL_SLUG_BY_LOCALE[locale][canonical] === urlSlug) return canonical;
+  }
+  return null;
+}
+
+/** List of URL slugs for generateStaticParams for a given locale. */
+export function getServiceSlugsForLocale(locale: Locale): string[] {
+  return SERVICE_PAGE_SLUGS.map((s) => SERVICE_URL_SLUG_BY_LOCALE[locale][s]);
+}
+
 export interface StrapiBlogArticle {
   id: number;
   documentId: string;
@@ -198,7 +270,7 @@ export interface StrapiTeamMember {
   role: string;
   slug: string;
   photo?: StrapiMedia | null;
-  linkedIn: string;
+  linkedIn?: string;
   order: number;
 }
 
@@ -470,7 +542,7 @@ export async function getServiceDetails(locale: Locale): Promise<StrapiServiceDe
   }
 }
 
-/** Get a single service by slug */
+/** Get a single service by slug (collection type service-details) */
 export async function getServiceBySlug(slug: string, locale: Locale): Promise<StrapiServiceDetail | null> {
   try {
     const res = await strapiFetch<StrapiCollectionResponse<StrapiServiceDetail>>(
@@ -488,15 +560,36 @@ export async function getServiceBySlug(slug: string, locale: Locale): Promise<St
   }
 }
 
-/** Get all blog articles */
+/** Get a service single-type page by slug (FR, EN, ES) */
+export async function getServiceSinglePage(
+  slug: ServicePageSlug,
+  locale: Locale
+): Promise<StrapiServiceSinglePage | null> {
+  const apiName = SERVICE_PAGE_API_MAP[slug];
+  if (!apiName) return null;
+  try {
+    const res = await strapiFetch<StrapiSingleResponse<StrapiServiceSinglePage>>(
+      apiName,
+      {
+        "populate[faq]": "*",
+        "populate[seo][populate]": "ogImage",
+      },
+      { locale }
+    );
+    return res.data;
+  } catch {
+    return null;
+  }
+}
+
+/** Get all blog articles (listing: no seo populate to avoid 400 on Strapi v5) */
 export async function getBlogArticles(locale: Locale): Promise<StrapiBlogArticle[]> {
   try {
     const res = await strapiFetch<StrapiCollectionResponse<StrapiBlogArticle>>(
       "blog-articles",
       {
-        "populate[featuredImage]": "*",
-        "populate[seo][populate]": "ogImage",
-        "sort": "publishedDate:desc",
+        "populate[0]": "featuredImage",
+        "sort[0]": "publishedDate:desc",
         "pagination[pageSize]": "100",
       },
       { locale }
@@ -532,8 +625,8 @@ export async function getTeamMembers(locale: Locale): Promise<StrapiTeamMember[]
     const res = await strapiFetch<StrapiCollectionResponse<StrapiTeamMember>>(
       "team-members",
       {
-        "populate[photo]": "*",
-        "sort": "order:asc",
+        populate: "photo",
+        "sort[0]": "order:asc",
         "pagination[pageSize]": "100",
       },
       { locale }
@@ -665,15 +758,29 @@ export async function getGlossaryTerms(locale: Locale): Promise<StrapiGlossaryTe
   }
 }
 
+/** Build a URL-friendly slug from a title (for SEO when Strapi slug is missing) */
+export function slugifyFromTitle(title: string): string {
+  return title
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/** Slug for fiches métier URLs: prefer Strapi slug, else slug from title (SEO), never documentId in URL */
+export function getJobMetierSlugForUrl(fiche: StrapiJobMetier): string {
+  const s = (fiche as { slug?: unknown }).slug;
+  return typeof s === "string" && s ? s : slugifyFromTitle(fiche.title);
+}
+
 /** Get job métier fiches */
 export async function getJobMetiers(locale: Locale): Promise<StrapiJobMetier[]> {
   try {
     const res = await strapiFetch<StrapiCollectionResponse<StrapiJobMetier>>(
       "job-metiers",
       {
-        "populate[featuredImage]": "*",
-        "populate[faq]": "*",
-        "populate[seo][populate]": "ogImage",
+        populate: "*",
         "pagination[pageSize]": "100",
       },
       { locale }
@@ -682,6 +789,59 @@ export async function getJobMetiers(locale: Locale): Promise<StrapiJobMetier[]> 
   } catch {
     return [];
   }
+}
+
+/** Get a single job métier fiche by slug */
+export async function getJobMetierBySlug(
+  slug: string,
+  locale: Locale
+): Promise<StrapiJobMetier | null> {
+  try {
+    const res = await strapiFetch<StrapiCollectionResponse<StrapiJobMetier>>(
+      "job-metiers",
+      {
+        "filters[slug][$eq]": slug,
+        populate: "*",
+      },
+      { locale }
+    );
+    return res.data[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Get a single job métier fiche by documentId (fallback when slug is missing in URL) */
+export async function getJobMetierByDocumentId(
+  documentId: string,
+  locale: Locale
+): Promise<StrapiJobMetier | null> {
+  try {
+    const res = await strapiFetch<StrapiCollectionResponse<StrapiJobMetier>>(
+      "job-metiers",
+      {
+        "filters[documentId][$eq]": documentId,
+        populate: "*",
+      },
+      { locale }
+    );
+    return res.data[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Get a fiche by slug (API slug, documentId, or slug derived from title for SEO URLs) */
+export async function getJobMetierBySlugOrSlugifiedTitle(
+  slug: string,
+  locale: Locale
+): Promise<StrapiJobMetier | null> {
+  let fiche = await getJobMetierBySlug(slug, locale);
+  if (fiche) return fiche;
+  fiche = await getJobMetierByDocumentId(slug, locale);
+  if (fiche) return fiche;
+  const fiches = await getJobMetiers(locale);
+  return fiches.find((f) => getJobMetierSlugForUrl(f) === slug) ?? null;
 }
 
 // ─── Utility: Strapi media URL ────────────────────────────

@@ -88,11 +88,11 @@ const servicesEn: ServicesContent = {
     ],
   },
   services: [
-    { title: "Fund-raising support", href: "/en/services/accompagnement-levee-de-fond" },
-    { title: "Outsourced management control", href: "/en/services/controle-de-gestion-externalise" },
-    { title: "Accounting outsourcing", href: "/en/services/comptabilite-externalisation" },
-    { title: "Outsourced financial management", href: "/en/services/gestion-financiere-externalisee" },
-    { title: "Cash flow forecast", href: "/en/services/previsionnel-tresorerie" },
+    { title: "Fund-raising support", href: "/en/services/fund-raising-support" },
+    { title: "Outsourced management control", href: "/en/services/outsourced-management-control" },
+    { title: "Accounting outsourcing", href: "/en/services/outsource-your-accounting" },
+    { title: "Outsourced financial management", href: "/en/services/outsourced-financial-management" },
+    { title: "Cash flow forecast", href: "/en/services/cash-flow-forecast" },
   ],
 };
 
@@ -124,11 +124,11 @@ const servicesEs: ServicesContent = {
     ],
   },
   services: [
-    { title: "Apoyo a la recaudaci\u00f3n de fondos", href: "/es/services/accompagnement-levee-de-fond" },
-    { title: "Control de gesti\u00f3n externalizado", href: "/es/services/controle-de-gestion-externalise" },
-    { title: "Externalizaci\u00f3n de la contabilidad", href: "/es/services/comptabilite-externalisation" },
-    { title: "Gesti\u00f3n financiera externalizada", href: "/es/services/gestion-financiere-externalisee" },
-    { title: "Previsi\u00f3n de tesorer\u00eda", href: "/es/services/previsionnel-tresorerie" },
+    { title: "Apoyo a la recaudaci\u00f3n de fondos", href: "/es/services/soporte-financiacion" },
+    { title: "Control de gesti\u00f3n externalizado", href: "/es/services/control-gestion-externalizado" },
+    { title: "Externalizaci\u00f3n de la contabilidad", href: "/es/services/externalizar-contabilidad" },
+    { title: "Gesti\u00f3n financiera externalizada", href: "/es/services/gestion-financiera-externalizada" },
+    { title: "Previsi\u00f3n de tesorer\u00eda", href: "/es/services/prevision-tesoreria" },
   ],
 };
 

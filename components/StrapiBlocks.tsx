@@ -2,11 +2,43 @@
  * Renders Strapi v5 Blocks (rich text) as React elements.
  * Supports: paragraphs, headings (h1-h6), lists, quotes, images, links,
  * and inline formatting (bold, italic, underline, strikethrough, code).
+ * When contactHref is provided, paragraphs that are only a CTA phrase
+ * (e.g. "Prendre rendez-vous", "Book a meeting") are rendered as the contact CTA button.
  */
 
 import Image from "next/image";
 import { strapiMediaUrl } from "@/lib/strapi";
 import type { StrapiBlock, StrapiInlineNode } from "@/lib/strapi";
+import ContactCTAButton from "@/components/ContactCTAButton";
+
+/** CTA phrases (all locales) that should render as the contact button. Comparison is normalized (lowercase, trim). */
+const CTA_PHRASES = new Set([
+  "prendre rendez-vous",
+  "réserver un rendez-vous",
+  "book a meeting",
+  "book a call",
+  "download the guide",
+  "télécharger le guide",
+  "descargar la guía",
+  "concierte una cita",
+  "reservar una cita",
+  "contactez-nous",
+  "get in touch",
+  "contacto",
+  "prendre contact",
+]);
+
+function getInlinePlainText(nodes: StrapiInlineNode[]): string {
+  return nodes
+    .map((n) => (n.type === "text" ? n.text : n.type === "link" ? getInlinePlainText(n.children) : ""))
+    .join("")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeForMatch(s: string): string {
+  return s.replace(/\s+/g, " ").trim().toLowerCase();
+}
 
 interface StrapiBlocksProps {
   blocks: StrapiBlock[];
@@ -14,28 +46,45 @@ interface StrapiBlocksProps {
   className?: string;
   /** Whether to use prose typography defaults */
   prose?: boolean;
+  /** When set, paragraphs that are only a CTA phrase are rendered as the contact CTA button linking here */
+  contactHref?: string;
 }
 
-export default function StrapiBlocks({ blocks, className = "", prose = false }: StrapiBlocksProps) {
+export default function StrapiBlocks({ blocks, className = "", prose = false, contactHref }: StrapiBlocksProps) {
   if (!blocks || blocks.length === 0) return null;
 
   return (
     <div className={`${prose ? "prose prose-lg max-w-none" : ""} ${className}`.trim()}>
       {blocks.map((block, i) => (
-        <BlockNode key={i} block={block} />
+        <BlockNode key={i} block={block} contactHref={contactHref} />
       ))}
     </div>
   );
 }
 
-function BlockNode({ block }: { block: StrapiBlock }) {
+function BlockNode({ block, contactHref }: { block: StrapiBlock; contactHref?: string }) {
   switch (block.type) {
-    case "paragraph":
+    case "paragraph": {
+      const plain = getInlinePlainText(block.children);
+      const isContactCTA =
+        contactHref &&
+        plain &&
+        CTA_PHRASES.has(normalizeForMatch(plain));
+      const isSingleLinkToContact =
+        contactHref &&
+        block.children.length === 1 &&
+        block.children[0].type === "link" &&
+        (block.children[0].url.includes("contact") || CTA_PHRASES.has(normalizeForMatch(getInlinePlainText(block.children[0].children))));
+      if (isContactCTA || isSingleLinkToContact) {
+        const label = plain || (block.children[0].type === "link" ? getInlinePlainText(block.children[0].children) : "") || "Contact";
+        return <ContactCTAButton label={label} href={contactHref} />;
+      }
       return (
         <p className="text-muted-foreground leading-relaxed mb-4">
           <InlineNodes nodes={block.children} />
         </p>
       );
+    }
 
     case "heading": {
       const Tag = `h${block.level}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";

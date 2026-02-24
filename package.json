@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:blog": "tsx scripts/seed-blog-to-strapi.ts",
+    "seed:fiches-metier": "tsx scripts/seed-fiches-metier-to-strapi.ts",
+    "seed:glossary": "tsx scripts/seed-glossary-to-strapi.ts",
+    "seed:service-pages": "tsx scripts/seed-service-single-pages-to-strapi.ts",
+    "seed:team": "tsx scripts/seed-team-members-to-strapi.ts"
   },
   "dependencies": {
     "framer-motion": "^12.34.3",
@@ -16,6 +21,7 @@
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "tsx": "^4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

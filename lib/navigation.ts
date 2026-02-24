@@ -1,4 +1,5 @@
 import { Locale } from "./i18n";
+import { SERVICE_PAGE_SLUGS, SERVICE_URL_SLUG_BY_LOCALE } from "./strapi";
 
 export interface NavItem {
   title: string;
@@ -62,13 +63,16 @@ const navEn: NavItem[] = [
   {
     title: "Services",
     href: "/en/services",
-    children: [
-      { text: "Cash flow forecast", href: "/en/services/previsionnel-tresorerie" },
-      { text: "Outsourced financial management", href: "/en/services/gestion-financiere-externalisee" },
-      { text: "Fund raising support", href: "/en/services/accompagnement-levee-de-fond" },
-      { text: "Outsource your accounting", href: "/en/services/comptabilite-externalisation" },
-      { text: "Outsourced management control", href: "/en/services/controle-de-gestion-externalise" },
-    ],
+    children: SERVICE_PAGE_SLUGS.map((slug) => ({
+      text: {
+        "previsionnel-tresorerie": "Cash flow forecast",
+        "gestion-financiere-externalisee": "Outsourced financial management",
+        "accompagnement-levee-de-fond": "Fund raising support",
+        "comptabilite-externalisation": "Outsource your accounting",
+        "controle-de-gestion-externalise": "Outsourced management control",
+      }[slug],
+      href: `/en/services/${SERVICE_URL_SLUG_BY_LOCALE.en[slug]}`,
+    })),
   },
   {
     title: "Resources",
@@ -98,13 +102,16 @@ const navEs: NavItem[] = [
   {
     title: "Servicios",
     href: "/es/services",
-    children: [
-      { text: "Previsión de tesorería", href: "/es/services/previsionnel-tresorerie" },
-      { text: "Gestión financiera externalizada", href: "/es/services/gestion-financiere-externalisee" },
-      { text: "Soporte a la financiación", href: "/es/services/accompagnement-levee-de-fond" },
-      { text: "Externalizar la contabilidad", href: "/es/services/comptabilite-externalisation" },
-      { text: "Control de gestión externalizado", href: "/es/services/controle-de-gestion-externalise" },
-    ],
+    children: SERVICE_PAGE_SLUGS.map((slug) => ({
+      text: {
+        "previsionnel-tresorerie": "Previsión de tesorería",
+        "gestion-financiere-externalisee": "Gestión financiera externalizada",
+        "accompagnement-levee-de-fond": "Soporte a la financiación",
+        "comptabilite-externalisation": "Externalizar la contabilidad",
+        "controle-de-gestion-externalise": "Control de gestión externalizado",
+      }[slug],
+      href: `/es/services/${SERVICE_URL_SLUG_BY_LOCALE.es[slug]}`,
+    })),
   },
   {
     title: "Recursos",

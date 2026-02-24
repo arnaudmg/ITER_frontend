@@ -28,12 +28,18 @@ export default function DafSubPage({ locale, content }: DafSubPageProps) {
               { label: content.breadcrumbLabel },
             ]}
           />
-          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">{content.h1}</h1>
-          {content.sections[0] && content.sections[0].content.map((p, i) => (
-            <p key={i} className="text-lg text-muted-foreground max-w-2xl leading-relaxed mb-3">
-              {p}
-            </p>
-          ))}
+          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">
+            {content.h1}
+          </h1>
+          {content.sections[0] &&
+            content.sections[0].content.map((p, i) => (
+              <p
+                key={i}
+                className="text-lg text-muted-foreground max-w-2xl leading-relaxed mb-3"
+              >
+                {p}
+              </p>
+            ))}
           <Link
             href={contactPath}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-iter-chartreuse text-iter-dark font-semibold hover:shadow-lg transition-all duration-300 mt-4"
@@ -48,13 +54,27 @@ export default function DafSubPage({ locale, content }: DafSubPageProps) {
       {content.sections.slice(1).map((section, i) => {
         const isAlt = i % 2 === 0;
         return (
-          <section key={i} className={isAlt ? "bg-muted/30 py-24 lg:py-32" : "bg-background py-24 lg:py-32"}>
+          <section
+            key={i}
+            className={
+              isAlt
+                ? "bg-muted/30 py-24 lg:py-32"
+                : "bg-background py-24 lg:py-16"
+            }
+          >
             <div className="container max-w-3xl">
               {section.heading && (
-                <h2 className="text-2xl lg:text-3xl font-bold font-heading text-foreground mb-6">{section.heading}</h2>
+                <h2 className="text-2xl lg:text-3xl font-bold font-heading text-foreground mb-6">
+                  {section.heading}
+                </h2>
               )}
               {section.content.map((p, j) => (
-                <p key={j} className="text-muted-foreground leading-relaxed mb-4">{p}</p>
+                <p
+                  key={j}
+                  className="text-muted-foreground leading-relaxed mb-4"
+                >
+                  {p}
+                </p>
               ))}
             </div>
           </section>

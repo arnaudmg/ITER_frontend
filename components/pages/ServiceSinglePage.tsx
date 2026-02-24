@@ -1,0 +1,90 @@
+import { Locale } from "@/lib/i18n";
+import { getContactPath } from "@/lib/navigation";
+import PageLayout from "@/components/PageLayout";
+import Breadcrumb from "@/components/Breadcrumb";
+import CTASection from "@/components/CTASection";
+import StrapiBlocks from "@/components/StrapiBlocks";
+import type { StrapiServiceSinglePage } from "@/lib/strapi";
+
+const breadcrumbsByLocale: Record<
+  Locale,
+  { servicesLabel: string; servicesHref: string }
+> = {
+  fr: { servicesLabel: "Services", servicesHref: "/services" },
+  en: { servicesLabel: "Services", servicesHref: "/en/services" },
+  es: { servicesLabel: "Servicios", servicesHref: "/es/services" },
+};
+
+interface ServiceSinglePageProps {
+  locale: Locale;
+  page: StrapiServiceSinglePage;
+  breadcrumbTitle: string;
+}
+
+export default function ServiceSinglePage({
+  locale,
+  page,
+  breadcrumbTitle,
+}: ServiceSinglePageProps) {
+  const bc = breadcrumbsByLocale[locale];
+
+  return (
+    <PageLayout locale={locale}>
+      <section className="bg-background pt-32 pb-16">
+        <div className="container flex flex-col items-center text-center">
+          <Breadcrumb
+            locale={locale}
+            items={[
+              { label: bc.servicesLabel, href: bc.servicesHref },
+              { label: breadcrumbTitle },
+            ]}
+          />
+          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">
+            {page.heroTitle}
+          </h1>
+          {page.heroSubtitle && (
+            <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
+              {page.heroSubtitle}
+            </p>
+          )}
+        </div>
+      </section>
+
+      <article className="bg-background py-24 lg:py-16">
+        <div className="container">
+          <div className="mx-auto max-w-3xl">
+          <StrapiBlocks
+            blocks={page.content}
+            className="text-muted-foreground"
+            prose
+            contactHref={getContactPath(locale)}
+          />
+          {page.faq && page.faq.length > 0 && (
+            <div className="mt-16 border-t border-border pt-16">
+              <h2 className="text-2xl font-bold font-heading text-foreground mb-6">
+                FAQ
+              </h2>
+              <div className="space-y-8">
+                {page.faq.map((item, i) => (
+                  <div key={i}>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">
+                      {item.question}
+                    </h3>
+                    <StrapiBlocks
+                      blocks={item.answer}
+                      className="text-muted-foreground text-sm"
+                      contactHref={getContactPath(locale)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          </div>
+        </div>
+      </article>
+
+      <CTASection locale={locale} />
+    </PageLayout>
+  );
+}

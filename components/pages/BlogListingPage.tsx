@@ -2,25 +2,32 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Locale } from "@/lib/i18n";
+import { getLocalePath } from "@/lib/i18n";
 import PageLayout from "@/components/PageLayout";
 import Breadcrumb from "@/components/Breadcrumb";
 import CTASection from "@/components/CTASection";
+import { strapiMediaUrl } from "@/lib/strapi";
+import type { StrapiBlogArticle } from "@/lib/strapi";
 
-const content: Record<Locale, {
-  resourcesLabel: string;
-  resourcesHref: string;
-  breadcrumbLabel: string;
-  h1: string;
-  intro: string;
-  discover: string;
-  cards: { title: string; href: string; image: string }[];
-}> = {
+const content: Record<
+  Locale,
+  {
+    resourcesLabel: string;
+    resourcesHref: string;
+    breadcrumbLabel: string;
+    h1: string;
+    intro: string;
+    discover: string;
+    cards: { title: string; href: string; image: string }[];
+  }
+> = {
   fr: {
     resourcesLabel: "Ressources",
     resourcesHref: "/ressources",
     breadcrumbLabel: "Blog",
     h1: "Nos articles",
-    intro: "Retrouvez toutes les actualités et analyses de nos experts financiers. Des articles pratiques pour piloter votre croissance.",
+    intro:
+      "Retrouvez toutes les actualités et analyses de nos experts financiers. Des articles pratiques pour piloter votre croissance.",
     discover: "Lire l'article",
     cards: [
       {
@@ -29,7 +36,8 @@ const content: Record<Locale, {
         image: "/images/blog/les-10-outils-cfos.jpg",
       },
       {
-        title: "Flux de trésorerie : définition et importance pour les entreprises",
+        title:
+          "Flux de trésorerie : définition et importance pour les entreprises",
         href: "/ressources/blog/flux-de-tresorerie",
         image: "/images/blog/flux-de-tresorerie.jpg",
       },
@@ -45,11 +53,13 @@ const content: Record<Locale, {
     resourcesHref: "/en/ressources",
     breadcrumbLabel: "Blog",
     h1: "Our articles",
-    intro: "Browse all news and analyses from our financial experts. Practical articles to drive your growth.",
+    intro:
+      "Browse all news and analyses from our financial experts. Practical articles to drive your growth.",
     discover: "Read the article",
     cards: [
       {
-        title: "AI and automation of repetitive tasks in the Finance department",
+        title:
+          "AI and automation of repetitive tasks in the Finance department",
         href: "/en/ressources/blog/ia-et-automatisation-des-taches-repetitives-du-departement-finance",
         image: "/images/blog/ia-automatisation.jpg",
       },
@@ -70,11 +80,13 @@ const content: Record<Locale, {
     resourcesHref: "/es/ressources",
     breadcrumbLabel: "Blog",
     h1: "Nuestros artículos",
-    intro: "Consulte todas las noticias y análisis de nuestros expertos financieros. Artículos prácticos para impulsar su crecimiento.",
+    intro:
+      "Consulte todas las noticias y análisis de nuestros expertos financieros. Artículos prácticos para impulsar su crecimiento.",
     discover: "Leer el artículo",
     cards: [
       {
-        title: "IA y automatización de tareas repetitivas en el departamento de Finanzas",
+        title:
+          "IA y automatización de tareas repetitivas en el departamento de Finanzas",
         href: "/es/ressources/blog/ia-et-automatisation-des-taches-repetitives-du-departement-finance",
         image: "/images/blog/ia-automatisation.jpg",
       },
@@ -92,12 +104,37 @@ const content: Record<Locale, {
   },
 };
 
-export default function BlogListingPage({ locale }: { locale: Locale }) {
+const blogBasePath = "/ressources/blog";
+
+function getBlogHref(locale: Locale, slug: string): string {
+  return getLocalePath(locale, `${blogBasePath}/${slug}`);
+}
+
+export default function BlogListingPage({
+  locale,
+  articles,
+}: {
+  locale: Locale;
+  articles?: StrapiBlogArticle[] | null;
+}) {
   const t = content[locale];
+  // When Strapi returns articles, use their featuredImage; otherwise fallback to static cards (local images in public/images/blog/)
+  const cards =
+    articles && articles.length > 0
+      ? articles.map((a) => {
+          const imageUrl = a.featuredImage?.url
+            ? strapiMediaUrl(a.featuredImage)
+            : "";
+          return {
+            title: a.title,
+            href: getBlogHref(locale, a.slug),
+            image: imageUrl || "/images/blog/placeholder.jpg",
+          };
+        })
+      : t.cards;
 
   return (
     <PageLayout locale={locale}>
-      {/* Hero */}
       <section className="bg-background pt-32 pb-16">
         <div className="container">
           <Breadcrumb
@@ -107,16 +144,19 @@ export default function BlogListingPage({ locale }: { locale: Locale }) {
               { label: t.breadcrumbLabel },
             ]}
           />
-          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">{t.h1}</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">{t.intro}</p>
+          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">
+            {t.h1}
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
+            {t.intro}
+          </p>
         </div>
       </section>
 
-      {/* Cards */}
-      <section className="bg-background py-24 lg:py-32">
+      <section className="bg-background py-24 lg:py-16">
         <div className="container">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {t.cards.map((card, i) => (
+            {cards.map((card, i) => (
               <Link key={i} href={card.href} className="group block">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl mb-5 bg-muted">
                   <Image
@@ -126,13 +166,18 @@ export default function BlogListingPage({ locale }: { locale: Locale }) {
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-2 block">Blog</span>
+                <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-2 block">
+                  Blog
+                </span>
                 <h3 className="text-lg font-semibold font-heading group-hover:text-iter-violet transition-colors leading-snug">
                   {card.title}
                 </h3>
                 <span className="inline-flex items-center gap-2 mt-3 text-[13px] font-medium text-foreground/40 group-hover:text-iter-violet transition-colors">
                   {t.discover}
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                  <ArrowRight
+                    size={14}
+                    className="transition-transform group-hover:translate-x-1"
+                  />
                 </span>
               </Link>
             ))}

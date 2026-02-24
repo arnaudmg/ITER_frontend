@@ -1,12 +1,28 @@
 import { Locale } from "@/lib/i18n";
 import { getAboutContent } from "@/lib/content/about";
+import type { StrapiTeamMember } from "@/lib/strapi";
 import PageLayout from "@/components/PageLayout";
 import Breadcrumb from "@/components/Breadcrumb";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CTASection from "@/components/CTASection";
 
-export default function AboutPage({ locale }: { locale: Locale }) {
+function toDisplayMember(m: StrapiTeamMember) {
+  return {
+    name: `${m.firstName} ${m.lastName}`.trim(),
+    role: m.role,
+    linkedin: m.linkedIn || "#",
+  };
+}
+
+export default function AboutPage({
+  locale,
+  teamMembers: strapiTeam = [],
+}: {
+  locale: Locale;
+  teamMembers?: StrapiTeamMember[];
+}) {
   const t = getAboutContent(locale);
+  const members = strapiTeam.map(toDisplayMember);
 
   return (
     <PageLayout locale={locale}>
@@ -14,36 +30,58 @@ export default function AboutPage({ locale }: { locale: Locale }) {
       <section className="bg-background pt-32 pb-16">
         <div className="container">
           <Breadcrumb locale={locale} items={[{ label: t.hero.h1 }]} />
-          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">{t.hero.h1}</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">{t.hero.intro}</p>
+          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">
+            {t.hero.h1}
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
+            {t.hero.intro}
+          </p>
         </div>
       </section>
 
       {/* Who we are */}
-      <section className="bg-background py-24 lg:py-32">
+      <section className="bg-background py-24 lg:py-16">
         <div className="container">
           <div className="max-w-3xl">
             <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
-              {locale === "fr" ? "Qui sommes-nous" : locale === "en" ? "Who we are" : "Quiénes somos"}
+              {locale === "fr"
+                ? "Qui sommes-nous"
+                : locale === "en"
+                  ? "Who we are"
+                  : "Quiénes somos"}
             </span>
-            <h2 className="text-3xl lg:text-4xl font-bold font-heading mb-6">{t.whoWeAre.heading}</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold font-heading mb-6">
+              {t.whoWeAre.heading}
+            </h2>
             {t.whoWeAre.paragraphs.map((p, i) => (
-              <p key={i} className="text-muted-foreground leading-relaxed mb-4">{p}</p>
+              <p key={i} className="text-muted-foreground leading-relaxed mb-4">
+                {p}
+              </p>
             ))}
           </div>
         </div>
       </section>
 
-      <div className="container"><div className="border-b border-border/50" /></div>
+      <div className="container">
+        <div className="border-b border-border/50" />
+      </div>
 
       {/* Vision */}
       <section className="bg-muted/30 py-24 lg:py-32">
         <div className="container">
           <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
-            {locale === "fr" ? "Notre vision" : locale === "en" ? "Our vision" : "Nuestra visión"}
+            {locale === "fr"
+              ? "Notre vision"
+              : locale === "en"
+                ? "Our vision"
+                : "Nuestra visión"}
           </span>
-          <h2 className="text-3xl lg:text-4xl font-bold font-heading text-foreground mb-4">{t.vision.heading}</h2>
-          <p className="text-muted-foreground leading-relaxed mb-12 max-w-2xl">{t.vision.intro}</p>
+          <h2 className="text-3xl lg:text-4xl font-bold font-heading text-foreground mb-4">
+            {t.vision.heading}
+          </h2>
+          <p className="text-muted-foreground leading-relaxed mb-12 max-w-2xl">
+            {t.vision.intro}
+          </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {t.vision.cards.map((card, i) => (
               <div
@@ -56,7 +94,9 @@ export default function AboutPage({ locale }: { locale: Locale }) {
                 <h3 className="text-lg font-semibold font-heading text-foreground mt-2 mb-3 group-hover:text-iter-violet transition-colors">
                   {card.title}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{card.description}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {card.description}
+                </p>
               </div>
             ))}
           </div>
@@ -64,14 +104,22 @@ export default function AboutPage({ locale }: { locale: Locale }) {
       </section>
 
       {/* When to call */}
-      <section className="bg-background py-24 lg:py-32">
+      <section className="bg-background py-24 lg:py-16">
         <div className="container">
           <div className="max-w-3xl">
             <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
-              {locale === "fr" ? "Accompagnement" : locale === "en" ? "Support" : "Acompañamiento"}
+              {locale === "fr"
+                ? "Accompagnement"
+                : locale === "en"
+                  ? "Support"
+                  : "Acompañamiento"}
             </span>
-            <h2 className="text-3xl lg:text-4xl font-bold font-heading mb-4">{t.whenToCall.heading}</h2>
-            <p className="text-muted-foreground leading-relaxed mb-12">{t.whenToCall.intro}</p>
+            <h2 className="text-3xl lg:text-4xl font-bold font-heading mb-4">
+              {t.whenToCall.heading}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed mb-12">
+              {t.whenToCall.intro}
+            </p>
             <div className="relative">
               <div className="absolute left-[7px] top-2 bottom-2 w-px bg-iter-violet/10" />
               <div className="space-y-8">
@@ -81,8 +129,12 @@ export default function AboutPage({ locale }: { locale: Locale }) {
                       <div className="w-[15px] h-[15px] rounded-full bg-iter-violet border-[3px] border-background shadow-sm mt-1" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold font-heading text-iter-violet mb-2">{stage.title}</h3>
-                      <p className="text-muted-foreground leading-relaxed">{stage.description}</p>
+                      <h3 className="text-lg font-semibold font-heading text-iter-violet mb-2">
+                        {stage.title}
+                      </h3>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {stage.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -92,26 +144,36 @@ export default function AboutPage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <div className="container"><div className="border-b border-border/50" /></div>
+      <div className="container">
+        <div className="border-b border-border/50" />
+      </div>
 
       {/* Team */}
       <section className="bg-muted/30 py-24 lg:py-32">
         <div className="container">
           <div className="text-center max-w-xl mx-auto mb-14">
             <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
-              {locale === "fr" ? "L'équipe" : locale === "en" ? "Team" : "Equipo"}
+              {locale === "fr"
+                ? "L'équipe"
+                : locale === "en"
+                  ? "Team"
+                  : "Equipo"}
             </span>
-            <h2 className="text-3xl lg:text-4xl font-bold font-heading">{t.team.heading}</h2>
-            <p className="text-muted-foreground leading-relaxed mt-4">{t.team.intro}</p>
+            <h2 className="text-3xl lg:text-4xl font-bold font-heading">
+              {t.team.heading}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed mt-4">
+              {t.team.intro}
+            </p>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-            {t.team.members.map((member, i) => (
+          <div className="flex flex-wrap justify-center gap-6">
+            {members.map((member, i) => (
               <a
                 key={i}
                 href={member.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group text-center"
+                className="group text-center w-[calc(50%-0.75rem)] sm:w-[calc(33.333%-1rem)] md:w-[calc(25%-1.125rem)] lg:w-[calc(20%-1.2rem)]"
               >
                 <div className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-3 rounded-2xl bg-iter-violet flex items-center justify-center group-hover:bg-iter-violet/80 transition-colors">
                   <span className="text-white font-bold text-lg md:text-xl">
@@ -124,7 +186,9 @@ export default function AboutPage({ locale }: { locale: Locale }) {
                 <h3 className="font-semibold text-sm group-hover:text-iter-violet transition-colors">
                   {member.name}
                 </h3>
-                <p className="text-xs text-muted-foreground mt-0.5">{member.role}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {member.role}
+                </p>
                 <div className="mt-1.5 flex justify-center">
                   <svg
                     className="w-3.5 h-3.5 text-muted-foreground/40 group-hover:text-iter-violet transition-colors"
@@ -141,11 +205,15 @@ export default function AboutPage({ locale }: { locale: Locale }) {
       </section>
 
       {/* FAQ */}
-      <section className="bg-background py-24 lg:py-32">
+      <section className="bg-background py-24 lg:py-16">
         <div className="container">
           <div className="text-center max-w-xl mx-auto mb-14">
-            <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">FAQ</span>
-            <h2 className="text-3xl lg:text-4xl font-bold font-heading">{t.faq.heading}</h2>
+            <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
+              FAQ
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-bold font-heading">
+              {t.faq.heading}
+            </h2>
           </div>
           <div className="max-w-3xl mx-auto space-y-3">
             {t.faq.items.map((item, i) => (
@@ -161,10 +229,17 @@ export default function AboutPage({ locale }: { locale: Locale }) {
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </summary>
-                <div className="px-6 pb-5 text-muted-foreground leading-relaxed">{item.answer}</div>
+                <div className="px-6 pb-5 text-muted-foreground leading-relaxed">
+                  {item.answer}
+                </div>
               </details>
             ))}
           </div>

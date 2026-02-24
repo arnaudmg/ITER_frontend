@@ -16,8 +16,12 @@ export default function ResourcesPage({ locale }: { locale: Locale }) {
       <section className="bg-background pt-32 pb-16">
         <div className="container">
           <Breadcrumb locale={locale} items={[{ label: t.breadcrumbLabel }]} />
-          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">{t.h1}</h1>
-          <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">{t.intro}</p>
+          <h1 className="text-4xl lg:text-5xl font-bold font-heading text-foreground max-w-2xl mb-6">
+            {t.h1}
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
+            {t.intro}
+          </p>
         </div>
       </section>
 
@@ -25,13 +29,21 @@ export default function ResourcesPage({ locale }: { locale: Locale }) {
       {t.categories.map((category, ci) => (
         <section
           key={ci}
-          className={ci % 2 === 0 ? "bg-background py-24 lg:py-32" : "bg-muted/30 py-24 lg:py-32"}
+          className={
+            ci % 2 === 0
+              ? "bg-background py-24 lg:py-16"
+              : "bg-muted/30 py-24 lg:py-32"
+          }
         >
           <div className="container">
             <div className="flex items-center justify-between mb-10">
               <div>
-                <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-2 block">{category.heading}</span>
-                <h2 className="text-2xl lg:text-3xl font-bold font-heading">{category.heading}</h2>
+                <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-2 block">
+                  {category.heading}
+                </span>
+                <h2 className="text-2xl lg:text-3xl font-bold font-heading">
+                  {category.heading}
+                </h2>
               </div>
               <Link
                 href={category.seeAllHref}
@@ -57,14 +69,19 @@ export default function ResourcesPage({ locale }: { locale: Locale }) {
                   <div className="absolute inset-0 bg-gradient-to-t from-iter-dark/90 via-iter-dark/30 to-transparent" />
                   <div className="absolute inset-0 flex flex-col justify-end p-5">
                     {card.tag && (
-                      <span className="text-xs font-semibold uppercase tracking-widest text-iter-chartreuse mb-2">{card.tag}</span>
+                      <span className="text-xs font-semibold uppercase tracking-widest text-iter-chartreuse mb-2">
+                        {card.tag}
+                      </span>
                     )}
                     <h3 className="text-base font-bold text-white mb-3 leading-snug">
                       {card.title}
                     </h3>
                     <span className="inline-flex items-center gap-2 text-[13px] font-medium text-iter-violet group-hover:text-white transition-colors">
                       {t.discover}
-                      <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                      <ArrowRight
+                        size={14}
+                        className="transition-transform group-hover:translate-x-1"
+                      />
                     </span>
                   </div>
                 </Link>

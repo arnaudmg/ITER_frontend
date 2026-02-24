@@ -3,18 +3,22 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Locale } from "@/lib/i18n";
 import { navigation, languageSwitcher, getHomePath } from "@/lib/navigation";
+import { getLocalizedPath } from "@/lib/path-localization";
 
 export default function Header({ locale }: { locale: Locale }) {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
   const nav = navigation[locale];
   const homePath = getHomePath(locale);
+  const isHome = pathname === "/" || pathname === "/en" || pathname === "/es";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -33,7 +37,7 @@ export default function Header({ locale }: { locale: Locale }) {
     };
   }, [mobileOpen]);
 
-  const localeLinks: Record<Locale, string> = { fr: "/", en: "/en", es: "/es" };
+  const getLocaleHref = (targetLocale: Locale) => getLocalizedPath(pathname, targetLocale);
   const contactItem = nav[nav.length - 1];
   const mainNav = nav.slice(0, -1);
 
@@ -43,14 +47,14 @@ export default function Header({ locale }: { locale: Locale }) {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
+        scrolled || !isHome
           ? "bg-iter-violet/95 backdrop-blur-md shadow-lg shadow-iter-violet/10"
           : "bg-transparent"
       }`}
     >
-      <div className="container flex items-center justify-between h-16 lg:h-[72px]">
+      <div className="container grid grid-cols-[1fr_auto_1fr] items-center h-16 lg:h-[72px] gap-4">
         {/* Logo */}
-        <Link href={homePath} className="flex items-center gap-2 group relative z-10">
+        <Link href={homePath} className="flex items-center gap-2 group relative z-10 min-w-0">
           <Image
             src="/images/logos/logo-hero.png"
             alt="Iter Advisors"
@@ -61,8 +65,8 @@ export default function Header({ locale }: { locale: Locale }) {
           />
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-0.5">
+        {/* Desktop Nav — centré */}
+        <nav className="hidden lg:flex items-center justify-center gap-0.5 min-w-0">
           {mainNav.map((item, i) => (
             <div
               key={item.href}
@@ -109,50 +113,52 @@ export default function Header({ locale }: { locale: Locale }) {
           ))}
         </nav>
 
-        {/* Right side: lang + CTA */}
-        <div className="hidden lg:flex items-center gap-3">
-          {/* Language Switcher */}
-          <div className="relative group">
-            <button className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-white/50 uppercase tracking-wider hover:text-white transition-colors">
-              {locale}
-              <svg className="w-2.5 h-2.5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            <div className="absolute top-full right-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-              <div className="w-28 bg-white/95 backdrop-blur-md border border-white/20 rounded-xl p-1 shadow-xl">
-                {(["fr", "en", "es"] as Locale[])
-                  .filter((l) => l !== locale)
-                  .map((l) => (
-                    <Link
-                      key={l}
-                      href={localeLinks[l]}
-                      className="block px-3 py-2 text-xs text-iter-dark/60 hover:text-iter-violet hover:bg-iter-violet/5 rounded-lg transition-colors uppercase tracking-wider"
-                    >
-                      {languageSwitcher[l].label}
-                    </Link>
-                  ))}
+        {/* Right side: lang + CTA (desktop) + menu toggle (mobile) */}
+        <div className="flex items-center justify-end gap-3 min-w-0">
+          <div className="hidden lg:flex items-center gap-3">
+            {/* Language Switcher */}
+            <div className="relative group">
+              <button className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-white/50 uppercase tracking-wider hover:text-white transition-colors">
+                {locale}
+                <svg className="w-2.5 h-2.5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className="absolute top-full right-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="w-28 bg-white/95 backdrop-blur-md border border-white/20 rounded-xl p-1 shadow-xl">
+                  {(["fr", "en", "es"] as Locale[])
+                    .filter((l) => l !== locale)
+                    .map((l) => (
+                      <Link
+                        key={l}
+                        href={getLocaleHref(l)}
+                        className="block px-3 py-2 text-xs text-iter-dark/60 hover:text-iter-violet hover:bg-iter-violet/5 rounded-lg transition-colors uppercase tracking-wider"
+                      >
+                        {languageSwitcher[l].label}
+                      </Link>
+                    ))}
+                </div>
               </div>
             </div>
+
+            {/* CTA Button */}
+            <Link
+              href={contactItem.href}
+              className="px-6 py-2.5 text-sm font-semibold rounded-full bg-iter-chartreuse text-iter-dark hover:brightness-105 transition-all duration-200 hover:shadow-lg hover:shadow-iter-chartreuse/30"
+            >
+              {contactItem.title.toUpperCase()}
+            </Link>
           </div>
 
-          {/* CTA Button */}
-          <Link
-            href={contactItem.href}
-            className="px-6 py-2.5 text-sm font-semibold rounded-full bg-iter-chartreuse text-iter-dark hover:brightness-105 transition-all duration-200 hover:shadow-lg hover:shadow-iter-chartreuse/30"
+          {/* Mobile toggle */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="lg:hidden p-2 text-white relative z-10"
+            aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
           >
-            {contactItem.title.toUpperCase()}
-          </Link>
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
-
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:hidden p-2 text-white relative z-10"
-          aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
-        >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
       </div>
 
       {/* Mobile Nav */}
@@ -223,7 +229,7 @@ export default function Header({ locale }: { locale: Locale }) {
                 {(["fr", "en", "es"] as Locale[]).map((l) => (
                   <Link
                     key={l}
-                    href={localeLinks[l]}
+                    href={getLocaleHref(l)}
                     className={`text-xs uppercase tracking-widest px-3 py-1.5 border rounded-lg ${
                       l === locale
                         ? "border-iter-chartreuse text-iter-chartreuse"

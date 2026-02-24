@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import FicheMetierListingPage from "@/components/pages/FicheMetierListingPage";
+import { getJobMetiers } from "@/lib/strapi";
 import { buildMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = buildMetadata({
@@ -9,6 +10,7 @@ export const metadata: Metadata = buildMetadata({
   path: "/ressources/fiche-metier",
 });
 
-export default function Page() {
-  return <FicheMetierListingPage locale="en" />;
+export default async function Page() {
+  const fiches = await getJobMetiers("en");
+  return <FicheMetierListingPage locale="en" fiches={fiches} />;
 }
