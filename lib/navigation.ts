@@ -25,6 +25,13 @@ const navFr: NavItem[] = [
     ],
   },
   {
+    title: "DRH Externalisé",
+    href: "/drh-externalise",
+    children: [
+      { text: "DRH à Temps Partagé", href: "/drh-externalise/temps-partage" },
+    ],
+  },
+  {
     title: "Services",
     href: "/services",
     children: [
@@ -58,6 +65,13 @@ const navEn: NavItem[] = [
       { text: "Shared-time CFO", href: "/en/daf-outsourcing/shared-time" },
       { text: "Transitional CFO", href: "/en/daf-outsourcing/transition" },
       { text: "CFO : The Mission", href: "/en/daf-outsourcing/metier" },
+    ],
+  },
+  {
+    title: "HR Outsourced",
+    href: "/en/hr-outsourcing",
+    children: [
+      { text: "Shared-time HR", href: "/en/hr-outsourcing/shared-time" },
     ],
   },
   {
@@ -97,6 +111,13 @@ const navEs: NavItem[] = [
       { text: "CFO a Tiempo Compartido", href: "/es/externalizacion-daf/multipropiedad" },
       { text: "CFO de transición", href: "/es/externalizacion-daf/transition" },
       { text: "CFO : Perfil profesional", href: "/es/externalizacion-daf/metier" },
+    ],
+  },
+  {
+    title: "RRHH externalizado",
+    href: "/es/externalizacion-rrhh",
+    children: [
+      { text: "RRHH a tiempo compartido", href: "/es/externalizacion-rrhh/tiempo-compartido" },
     ],
   },
   {

@@ -22,6 +22,18 @@ const DAF_SUB_PATHS: Record<string, Record<Locale, string>> = {
   metier: { fr: "metier", en: "metier", es: "metier" },
 };
 
+const DRH_BASE: Record<Locale, string> = {
+  fr: "drh-externalise",
+  en: "hr-outsourcing",
+  es: "externalizacion-rrhh",
+};
+
+const DRH_SUB_PATHS: Record<string, Record<Locale, string>> = {
+  "temps-partage": { fr: "temps-partage", en: "shared-time", es: "tiempo-compartido" },
+  "shared-time": { fr: "temps-partage", en: "shared-time", es: "tiempo-compartido" },
+  "tiempo-compartido": { fr: "temps-partage", en: "shared-time", es: "tiempo-compartido" },
+};
+
 const ABOUT_PATH: Record<Locale, string> = {
   fr: "a-propos",
   en: "a-propos",
@@ -92,6 +104,17 @@ export function getLocalizedPath(pathname: string, targetLocale: Locale): string
     if (segs.length === 1) return base;
     const sub = segs[1];
     const subMap = DAF_SUB_PATHS[sub];
+    if (subMap) return `${base}/${subMap[targetLocale]}`;
+    return `${base}/${sub}`;
+  }
+
+  // DRH
+  const drhBases = Object.values(DRH_BASE);
+  if (drhBases.includes(segs[0]) && segs.length >= 1) {
+    const base = `${prefix}/${DRH_BASE[targetLocale]}`;
+    if (segs.length === 1) return base;
+    const sub = segs[1];
+    const subMap = DRH_SUB_PATHS[sub];
     if (subMap) return `${base}/${subMap[targetLocale]}`;
     return `${base}/${sub}`;
   }

@@ -162,6 +162,42 @@ export interface StrapiDafSubPage {
   seo: StrapiSeo;
 }
 
+/** DRH service row for the services grid */
+export interface StrapiDrhServiceRow {
+  id: number;
+  title: string;
+  description: string;
+  tier1: boolean;
+  tier2: boolean;
+  tier3: boolean;
+  tier4: boolean;
+  isAddOn: boolean;
+}
+
+/** DRH service category (repeatable on drh-externalise-page) */
+export interface StrapiDrhServiceCategory {
+  id: number;
+  categoryName: string;
+  services: StrapiDrhServiceRow[];
+}
+
+export interface StrapiDrhPage {
+  heroTitle: string;
+  heroSubtitle: string;
+  content: StrapiBlock[];
+  subPages: { id: number; title: string; description: string; icon?: StrapiMedia; link: string }[];
+  serviceCategories?: StrapiDrhServiceCategory[];
+  faq: StrapiFaqItem[];
+  seo: StrapiSeo;
+}
+
+export interface StrapiDrhSubPage {
+  heroTitle: string;
+  content: StrapiBlock[];
+  faq: StrapiFaqItem[];
+  seo: StrapiSeo;
+}
+
 export interface StrapiServicesPage {
   heroTitle: string;
   introduction: string;
@@ -494,6 +530,47 @@ export async function getDafSubPage(
 ): Promise<StrapiDafSubPage | null> {
   try {
     const res = await strapiFetch<StrapiSingleResponse<StrapiDafSubPage>>(
+      type,
+      {
+        "populate[faq]": "*",
+        "populate[seo][populate]": "ogImage",
+      },
+      { locale }
+    );
+    return res.data;
+  } catch {
+    return null;
+  }
+}
+
+/** Get DRH externalisé page data */
+export async function getDrhExternalisePage(locale: Locale): Promise<StrapiDrhPage | null> {
+  try {
+    const res = await strapiFetch<StrapiSingleResponse<StrapiDrhPage>>(
+      "drh-externalise-page",
+      {
+        "populate[subPages][populate]": "icon",
+        "populate[serviceCategories][populate][services]": "*",
+        "populate[faq]": "*",
+        "populate[seo][populate]": "ogImage",
+      },
+      { locale }
+    );
+    return res.data;
+  } catch {
+    return null;
+  }
+}
+
+export type StrapiDrhSubPageType = "drh-temps-partage-page";
+
+/** Get DRH sub-pages (temps partagé, etc.) */
+export async function getDrhSubPage(
+  type: StrapiDrhSubPageType,
+  locale: Locale
+): Promise<StrapiDrhSubPage | null> {
+  try {
+    const res = await strapiFetch<StrapiSingleResponse<StrapiDrhSubPage>>(
       type,
       {
         "populate[faq]": "*",

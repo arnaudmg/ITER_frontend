@@ -310,6 +310,15 @@ SCHEMAS = {
         "heroTitle": "string", "content": "blocks",
         "faq": "component_repeatable", "seo": "component",
     },
+    "drh-externalise-page": {
+        "heroTitle": "string", "heroSubtitle": "text", "content": "blocks",
+        "subPages": "component_repeatable", "serviceCategories": "component_repeatable",
+        "faq": "component_repeatable", "seo": "component",
+    },
+    "drh-temps-partage-page": {
+        "heroTitle": "string", "content": "blocks",
+        "faq": "component_repeatable", "seo": "component",
+    },
     "services-page": {
         "heroTitle": "string", "introduction": "text",
         "serviceCards": "relation", "seo": "component",
@@ -629,6 +638,8 @@ def main():
     migrate_single_type("daf-metier-page", "daf-metier-page")
     migrate_single_type("daf-temps-partage-page", "daf-temps-partage-page")
     migrate_single_type("daf-transition-page", "daf-transition-page")
+    migrate_single_type("drh-externalise-page", "drh-externalise-page")
+    migrate_single_type("drh-temps-partage-page", "drh-temps-partage-page")
     migrate_single_type("services-page", "services-page")
     migrate_single_type("legal-page", "legal-page")
     migrate_single_type("privacy-page", "privacy-page")

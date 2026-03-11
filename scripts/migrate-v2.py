@@ -238,6 +238,7 @@ MEDIA_FIELDS = {
 I18N_TYPES = {
     "homepage", "about-page", "contact-page", "daf-externalise-page",
     "daf-metier-page", "daf-temps-partage-page", "daf-transition-page",
+    "drh-externalise-page", "drh-temps-partage-page",
     "services-page", "legal-page", "privacy-page", "global",
     "blog-article", "glossary-term", "testimonial", "service-detail",
     "job-metier",
@@ -497,6 +498,8 @@ def main():
     migrate_single("daf-metier-page", "daf-metier-page")
     migrate_single("daf-temps-partage-page", "daf-temps-partage-page")
     migrate_single("daf-transition-page", "daf-transition-page")
+    migrate_single("drh-externalise-page", "drh-externalise-page")
+    migrate_single("drh-temps-partage-page", "drh-temps-partage-page")
     migrate_single("services-page", "services-page")
     migrate_single("legal-page", "legal-page")
     migrate_single("privacy-page", "privacy-page")
