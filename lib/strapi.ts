@@ -464,54 +464,40 @@ export async function getCmsNavigation(locale: Locale): Promise<CmsNavItem[] | u
 /** Get global site settings (nav, footer, etc.) */
 export async function getGlobal(locale: Locale): Promise<StrapiGlobal | null> {
   const fallbackLocales: Locale[] = locale === "fr" ? ["en"] : locale === "en" ? ["fr"] : ["en", "fr"];
-  try {
-    const fetchGlobal = async (targetLocale: Locale) =>
-      strapiFetch<StrapiSingleResponse<StrapiGlobal>>(
-        "global",
-        {
-          "populate[navigation][populate]": "children",
-          "populate[footer][populate]": "*",
-          "populate[socialLinks][populate]": "*",
-          "populate[aggregateRating][populate]": "*",
-          "populate[logo]": "*",
-          "populate[defaultSeo][populate]": "ogImage",
-        },
-        { locale: targetLocale, revalidate: 60 }
-      );
 
+  const fetchGlobal = (targetLocale: Locale) =>
+    strapiFetch<StrapiSingleResponse<StrapiGlobal>>(
+      "global",
+      {
+        "populate[navigation][populate]": "children",
+        "populate[footer]": "true",
+        "populate[socialLinks]": "true",
+        "populate[aggregateRating]": "true",
+        "populate[logo][fields][0]": "url",
+        "populate[logo][fields][1]": "alternativeText",
+        "populate[logo][fields][2]": "width",
+        "populate[logo][fields][3]": "height",
+        "populate[defaultSeo][populate]": "ogImage",
+      },
+      { locale: targetLocale, revalidate: 60 }
+    );
+
+  try {
     const primary = await fetchGlobal(locale);
     if (primary.data) return primary.data;
-
-    for (const fallbackLocale of fallbackLocales) {
-      try {
-        const fallback = await fetchGlobal(fallbackLocale);
-        if (fallback.data) return fallback.data;
-      } catch {
-        // Continue to next fallback locale.
-      }
-    }
   } catch {
-    // Try fallback locales before giving up.
-    for (const fallbackLocale of fallbackLocales) {
-      try {
-        const fallback = await strapiFetch<StrapiSingleResponse<StrapiGlobal>>(
-          "global",
-          {
-            "populate[navigation][populate]": "children",
-            "populate[footer][populate]": "*",
-            "populate[socialLinks][populate]": "*",
-            "populate[aggregateRating][populate]": "*",
-            "populate[logo]": "*",
-            "populate[defaultSeo][populate]": "ogImage",
-          },
-          { locale: fallbackLocale, revalidate: 60 }
-        );
-        if (fallback.data) return fallback.data;
-      } catch {
-        // Continue to next fallback locale.
-      }
+    // Primary locale failed, try fallbacks.
+  }
+
+  for (const fallbackLocale of fallbackLocales) {
+    try {
+      const fallback = await fetchGlobal(fallbackLocale);
+      if (fallback.data) return fallback.data;
+    } catch {
+      // Continue to next fallback locale.
     }
   }
+
   return null;
 }
 

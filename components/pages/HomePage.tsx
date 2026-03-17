@@ -31,7 +31,7 @@ import {
 import { Locale } from "@/lib/i18n";
 import { getContactPath } from "@/lib/navigation";
 import { getHomeContent } from "@/lib/content/home";
-import type { StrapiTeamMember, CmsNavItem } from "@/lib/strapi";
+import type { StrapiTeamMember, CmsNavItem, StrapiHomepage } from "@/lib/strapi";
 import { strapiMediaUrl } from "@/lib/strapi";
 import PageLayout from "@/components/PageLayout";
 
@@ -84,153 +84,11 @@ const clientLogos = [
   { src: "/images/logos/logo-yego.jpg", alt: "Yego" },
 ];
 
-/* ─── Finance Services ─── */
-const financeServices = [
-  {
-    icon: TrendingUp,
-    title: "DAF externalisé",
-    desc: "Un directeur financier dédié à temps partagé pour structurer et piloter votre fonction finance.",
-  },
-  {
-    icon: PieChart,
-    title: "Contrôle de gestion",
-    desc: "Tableaux de bord, reporting et analyse de performance pour des décisions éclairées.",
-  },
-  {
-    icon: Wallet,
-    title: "Gestion de trésorerie",
-    desc: "Prévisionnel de trésorerie, optimisation du BFR et pilotage de la liquidité.",
-  },
-  {
-    icon: FileText,
-    title: "Externalisation comptable",
-    desc: "Une comptabilité aux plus hauts standards, libérant votre temps pour l'essentiel.",
-  },
-  {
-    icon: BarChart3,
-    title: "Levée de fonds",
-    desc: "Accompagnement stratégique pour sécuriser vos financements et convaincre les investisseurs.",
-  },
-  {
-    icon: Briefcase,
-    title: "M&A & Due Diligence",
-    desc: "Conseil en fusions-acquisitions et audits financiers pour sécuriser vos opérations.",
-  },
-];
-
-/* ─── DAF Benefits ─── */
-const dafBenefits = [
-  "Opérationnel dès le 1er jour d'accompagnement",
-  "Expertise sectorielle approfondie (startups, PME, scale-ups)",
-  "Maîtrise des outils digitaux pour moderniser vos processus",
-  "Interlocuteur dédié à votre dossier",
-  "Flexibilité : quelques jours par semaine ou par mois",
-];
-
-/* ─── Process Steps ─── */
-const steps = [
-  {
-    icon: Search,
-    num: "01",
-    title: "Diagnostic",
-    desc: "Nous analysons votre situation financière actuelle, identifions les enjeux prioritaires et définissons un plan d'action adapté.",
-  },
-  {
-    icon: Lightbulb,
-    num: "02",
-    title: "Stratégie",
-    desc: "Nous co-construisons avec vous une feuille de route claire, avec des objectifs mesurables et des jalons concrets.",
-  },
-  {
-    icon: Cog,
-    num: "03",
-    title: "Mise en oeuvre",
-    desc: "Nos experts s'intègrent à votre équipe et déploient les solutions : outils, processus, reporting et pilotage opérationnel.",
-  },
-  {
-    icon: Rocket,
-    num: "04",
-    title: "Pilotage continu",
-    desc: "Nous assurons un suivi régulier, ajustons la stratégie et vous accompagnons dans la durée pour pérenniser vos acquis.",
-  },
-];
-
-/* ─── Why Reasons ─── */
-const reasons = [
-  {
-    icon: Zap,
-    title: "Opérationnel immédiatement",
-    desc: "Nos experts s'intègrent dès le premier jour, comme un membre de votre équipe. Pas de période d'adaptation longue.",
-  },
-  {
-    icon: Globe,
-    title: "Finance & RH au même endroit",
-    desc: "Une proposition de valeur unique : couvrir vos fonctions Finance et RH avec une seule équipe.",
-  },
-  {
-    icon: Clock,
-    title: "Flexibilité totale",
-    desc: "Quelques jours par semaine ou par mois, depuis vos bureaux ou à distance. Nous nous adaptons à vos besoins réels.",
-  },
-  {
-    icon: Award,
-    title: "Esprit entrepreneurial",
-    desc: "Une expérience reconnue dans les secteurs de l'innovation, pour des startups et PME, souvent dans un contexte international.",
-  },
-];
-
-/* ─── When Phases ─── */
-const phases = [
-  {
-    icon: Rocket,
-    label: "Lancement",
-    desc: "Structurez vos fonctions finance dès le départ pour poser des bases solides.",
-  },
-  {
-    icon: TrendingUp,
-    label: "Croissance",
-    desc: "Accompagnez votre scaling avec des processus financiers adaptés à votre rythme.",
-  },
-  {
-    icon: AlertTriangle,
-    label: "Gestion de crise",
-    desc: "Stabilisez votre trésorerie dans les moments critiques.",
-  },
-  {
-    icon: Banknote,
-    label: "Levée de fonds",
-    desc: "Préparez et sécurisez vos financements avec des données certifiées.",
-  },
-  {
-    icon: BarChart3,
-    label: "Post-levée",
-    desc: "Structurez votre croissance post-financement avec rigueur et agilité.",
-  },
-];
-
-/* ─── FAQs ─── */
-const faqs = [
-  {
-    q: "Qu'est-ce qu'un DAF externalisé ?",
-    a: "Un DAF externalisé est un directeur financier qui travaille à temps partiel ou sur une base contractuelle pour des entreprises qui n'ont pas besoin ou ne peuvent pas se permettre un poste à temps plein. Ils apportent leur expertise pour aider à la gestion stratégique et opérationnelle.",
-  },
-  {
-    q: "Quels types d'entreprises ont besoin de ces services ?",
-    a: "Nos services s'adressent principalement aux startups, PME et scale-ups en phase de lancement, croissance, restructuration ou levée de fonds. Toute entreprise qui souhaite structurer ses fonctions support sans recruter à temps plein peut bénéficier de notre accompagnement.",
-  },
-  {
-    q: "Combien de temps un expert doit-il consacrer à mon entreprise ?",
-    a: "Cela dépend de vos besoins. Nous proposons des interventions de quelques jours par semaine à quelques jours par mois. La flexibilité est au coeur de notre modèle pour s'adapter à votre réalité opérationnelle.",
-  },
-  {
-    q: "Comment se passe la transition avec un expert externalisé ?",
-    a: "Nos experts sont opérationnels dès le premier jour. Nous commençons par un diagnostic rapide de votre situation, puis nous mettons en place un plan d'action concret. L'intégration se fait naturellement, comme un membre de votre équipe.",
-  },
-  {
-    q: "Quelle est la différence entre un DAF externalisé et un comptable ?",
-    a: "Un comptable gère la tenue des comptes et les obligations déclaratives. Un DAF externalisé va bien au-delà : stratégie financière, pilotage de la performance, levée de fonds, relations investisseurs, optimisation des coûts et structuration de la croissance.",
-  },
-];
+/* ─── Icons for service cards ─── */
+const serviceIcons = [TrendingUp, PieChart, Wallet, FileText, BarChart3, Briefcase];
+const stepIcons = [Search, Lightbulb, Cog, Rocket];
+const phaseIcons = [Rocket, TrendingUp, AlertTriangle, Banknote, BarChart3];
+const whyIcons = [Zap, Globe, Clock, Award];
 
 /* ─── Hero avatars: driven by Team Member showInHero boolean ─── */
 
@@ -309,13 +167,30 @@ export default function HomePage({
   locale,
   teamMembers: strapiTeam = [],
   cmsNavigation,
+  homepage,
 }: {
   locale: Locale;
   teamMembers?: StrapiTeamMember[];
   cmsNavigation?: CmsNavItem[];
+  homepage?: StrapiHomepage | null;
 }) {
   const t = getHomeContent(locale);
   const contactPath = getContactPath(locale);
+
+  const heroTitle = homepage?.heroTitle || `${t.hero.h1.before}${t.hero.h1.highlight}${t.hero.h1.after}`;
+  const heroSubtitle = homepage?.heroSubtitle || t.hero.h2;
+  const heroCtaLabel = homepage?.heroCta?.label || t.hero.cta;
+  const heroCtaUrl = homepage?.heroCta?.url || contactPath;
+
+  const cmsValueProps = homepage?.valuePropositions && homepage.valuePropositions.length > 0
+    ? homepage.valuePropositions
+    : null;
+  const cmsStats = homepage?.statistics && homepage.statistics.length > 0
+    ? homepage.statistics
+    : null;
+  const cmsWhyChoose = homepage?.whyChooseItems && homepage.whyChooseItems.length > 0
+    ? homepage.whyChooseItems
+    : null;
 
   const heroAvatars = strapiTeam
     .filter((m) => m.showInHero && m.photo)
@@ -423,24 +298,30 @@ export default function HomePage({
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white leading-[1.08] tracking-tight mb-5 animate-[fadeInUp_0.7s_ease-out_0.2s_both]">
-              {t.hero.h1.before}
-              <span className="text-iter-chartreuse">
-                {t.hero.h1.highlight}
-              </span>
-              {t.hero.h1.after}
+              {homepage?.heroTitle ? (
+                heroTitle
+              ) : (
+                <>
+                  {t.hero.h1.before}
+                  <span className="text-iter-chartreuse">
+                    {t.hero.h1.highlight}
+                  </span>
+                  {t.hero.h1.after}
+                </>
+              )}
             </h1>
 
             <p className="text-lg lg:text-xl text-white/70 max-w-2xl mb-10 leading-relaxed animate-[fadeInUp_0.7s_ease-out_0.35s_both]">
-              {t.hero.h2}
+              {heroSubtitle}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 animate-[fadeInUp_0.7s_ease-out_0.5s_both]">
               <Link
-                href={contactPath}
+                href={heroCtaUrl}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-iter-chartreuse text-iter-dark font-semibold text-base hover:brightness-105 hover:shadow-xl hover:shadow-iter-chartreuse/20 transition-all duration-300 group"
               >
                 <Calendar size={18} />
-                {t.hero.cta}
+                {heroCtaLabel}
                 <ArrowRight
                   size={18}
                   className="group-hover:translate-x-1 transition-transform"
@@ -450,11 +331,7 @@ export default function HomePage({
                 href="#services"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-white/30 text-white font-medium text-base hover:bg-white/10 transition-all duration-300"
               >
-                {locale === "fr"
-                  ? "Découvrir nos services"
-                  : locale === "en"
-                    ? "Discover our services"
-                    : "Descubrir nuestros servicios"}
+                {t.discoverServices}
               </Link>
             </div>
 
@@ -503,7 +380,7 @@ export default function HomePage({
                   ))}
                 </div>
                 <span className="text-white/60 text-sm">
-                  5/5 sur{" "}
+                  5/5 {t.trustfolioLabel}{" "}
                   <a
                     href="https://trustfolio.co/profil/iter-advisors-q3yNQhXTUNc/reviews"
                     target="_blank"
@@ -525,11 +402,7 @@ export default function HomePage({
       <section className="py-16 bg-background border-b border-border/50">
         <div className="container mb-8">
           <p className="text-center text-sm font-medium text-muted-foreground uppercase tracking-widest">
-            {locale === "fr"
-              ? "Ils nous font confiance"
-              : locale === "en"
-                ? "They trust us"
-                : "Confían en nosotros"}
+            {t.clientsLabel}
           </p>
         </div>
         <div className="relative overflow-hidden">
@@ -565,42 +438,13 @@ export default function HomePage({
             className="max-w-3xl mb-20"
           >
             <span className="inline-block px-3 py-1 rounded-full bg-iter-violet/10 text-iter-violet text-xs font-semibold uppercase tracking-widest mb-4">
-              {locale === "fr"
-                ? "Nos services"
-                : locale === "en"
-                  ? "Our services"
-                  : "Nuestros servicios"}
+              {locale === "fr" ? "Nos services" : locale === "en" ? "Our services" : "Nuestros servicios"}
             </span>
             <h2 className="text-3xl lg:text-5xl font-bold text-foreground leading-tight mb-6">
-              {locale === "fr" ? (
-                <>
-                  Deux pôles d&apos;expertise pour{" "}
-                  <span className="text-iter-violet">structurer</span> et{" "}
-                  <span className="text-iter-violet">accélérer</span> votre
-                  croissance
-                </>
-              ) : locale === "en" ? (
-                <>
-                  Two areas of expertise to{" "}
-                  <span className="text-iter-violet">structure</span> and{" "}
-                  <span className="text-iter-violet">accelerate</span> your
-                  growth
-                </>
-              ) : (
-                <>
-                  Dos áreas de experiencia para{" "}
-                  <span className="text-iter-violet">estructurar</span> y{" "}
-                  <span className="text-iter-violet">acelerar</span> su
-                  crecimiento
-                </>
-              )}
+              {t.servicesHeading}
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              {locale === "fr"
-                ? "Nous accompagnons les entreprises à chaque étape de leur développement avec des solutions sur-mesure en finance et ressources humaines."
-                : locale === "en"
-                  ? "We support businesses at every stage of their development with tailor-made finance and human resources solutions."
-                  : "Acompañamos a las empresas en cada etapa de su desarrollo con soluciones a medida en finanzas y recursos humanos."}
+              {t.servicesSubtitle}
             </p>
           </motion.div>
 
@@ -612,8 +456,8 @@ export default function HomePage({
               <div className="h-px flex-1 bg-iter-violet/20" />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {financeServices.map((s, i) => (
-                <ServiceCard key={s.title} {...s} index={i} />
+              {t.financeServices.map((s, i) => (
+                <ServiceCard key={s.title} icon={serviceIcons[i] ?? TrendingUp} title={s.title} desc={s.desc} index={i} />
               ))}
             </div>
           </div>
@@ -687,17 +531,13 @@ export default function HomePage({
                 Finance
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground leading-tight mb-6">
-                DAF externalisé & CFO à temps partagé
+                {t.dafSection.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-8">
-                Chez Iter Advisors, nos CFO part-time apportent une expertise
-                sectorielle approfondie et une maîtrise des outils digitaux pour
-                moderniser vos processus financiers. Fort de notre culture
-                entrepreneuriale, nous accompagnons efficacement les entreprises
-                dans différentes phases clés de leur développement.
+                {t.dafSection.paragraph}
               </p>
               <div className="space-y-3 mb-8">
-                {dafBenefits.map((b, i) => (
+                {t.dafSection.benefits.map((b, i) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, x: 20 }}
@@ -717,11 +557,7 @@ export default function HomePage({
                 href={contactPath}
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-iter-violet text-white font-semibold hover:shadow-lg hover:shadow-iter-violet/20 transition-all duration-300"
               >
-                {locale === "fr"
-                  ? "Parler à un expert Finance"
-                  : locale === "en"
-                    ? "Talk to a Finance expert"
-                    : "Hablar con un experto en Finanzas"}
+                {t.dafSection.cta}
               </Link>
             </motion.div>
           </div>
@@ -748,61 +584,46 @@ export default function HomePage({
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <span className="inline-block px-3 py-1 rounded-full bg-iter-violet/10 text-iter-violet text-xs font-semibold uppercase tracking-widest mb-4">
-              {locale === "fr"
-                ? "Notre méthode"
-                : locale === "en"
-                  ? "Our method"
-                  : "Nuestro método"}
+              {locale === "fr" ? "Notre méthode" : locale === "en" ? "Our method" : "Nuestro método"}
             </span>
             <h2 className="text-3xl lg:text-5xl font-bold text-foreground leading-tight mb-6">
-              {locale === "fr"
-                ? "Un accompagnement structuré en 4 étapes"
-                : locale === "en"
-                  ? "A structured support in 4 steps"
-                  : "Un acompañamiento estructurado en 4 pasos"}
+              {t.processHeading}
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              {locale === "fr"
-                ? "De l'audit initial au pilotage continu, nous construisons avec vous une trajectoire claire et mesurable."
-                : locale === "en"
-                  ? "From initial audit to continuous management, we build a clear and measurable trajectory with you."
-                  : "Desde la auditoría inicial hasta la gestión continua, construimos con usted una trayectoria clara y medible."}
+              {t.processSubtitle}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4">
-            {steps.map((step, i) => (
-              <motion.div
-                key={step.num}
-                initial={{ opacity: 0, y: 30 }}
-                animate={processInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.2 + i * 0.15 }}
-                className="relative"
-              >
-                {i < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-12 left-[calc(50%+32px)] right-0 h-px bg-gradient-to-r from-iter-violet/30 to-iter-violet/5 z-0" />
-                )}
-                <div className="relative z-10 p-6 rounded-2xl bg-card border border-border/50 hover:border-iter-violet/30 hover:shadow-xl transition-all duration-300 group h-full">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 rounded-2xl bg-iter-violet/10 flex items-center justify-center group-hover:bg-iter-violet group-hover:text-white transition-all duration-300">
-                      <step.icon
-                        size={24}
-                        className="text-iter-violet group-hover:text-white transition-colors"
-                      />
+            {t.steps.map((step, i) => {
+              const StepIcon = stepIcons[i] ?? Search;
+              const num = String(i + 1).padStart(2, "0");
+              return (
+                <motion.div
+                  key={num}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={processInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.2 + i * 0.15 }}
+                  className="relative"
+                >
+                  {i < t.steps.length - 1 && (
+                    <div className="hidden lg:block absolute top-12 left-[calc(50%+32px)] right-0 h-px bg-gradient-to-r from-iter-violet/30 to-iter-violet/5 z-0" />
+                  )}
+                  <div className="relative z-10 p-6 rounded-2xl bg-card border border-border/50 hover:border-iter-violet/30 hover:shadow-xl transition-all duration-300 group h-full">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-14 h-14 rounded-2xl bg-iter-violet/10 flex items-center justify-center group-hover:bg-iter-violet group-hover:text-white transition-all duration-300">
+                        <StepIcon size={24} className="text-iter-violet group-hover:text-white transition-colors" />
+                      </div>
+                      <span className="text-3xl font-bold text-iter-violet/20 group-hover:text-iter-violet/40 transition-colors">
+                        {num}
+                      </span>
                     </div>
-                    <span className="text-3xl font-bold text-iter-violet/20 group-hover:text-iter-violet/40 transition-colors">
-                      {step.num}
-                    </span>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{step.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {step.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -865,76 +686,88 @@ export default function HomePage({
               {t.whyChoose.heading}
             </h2>
             <p className="text-lg text-white/70 leading-relaxed">
-              {locale === "fr"
-                ? "Nous avons pratiqué les métiers de DAF au quotidien. C'est la raison pour laquelle nous comprenons si bien vos besoins."
-                : locale === "en"
-                  ? "We have practiced CFO roles on a daily basis. That's why we understand your needs so well."
-                  : "Hemos practicado el rol de CFO a diario. Por eso entendemos tan bien sus necesidades."}
+              {t.whySubtitle}
             </p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={whyInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
-          >
-            {[
-              {
-                value: 100,
-                suffix: "+",
-                label:
-                  locale === "fr"
-                    ? "Clients accompagnés"
-                    : locale === "en"
-                      ? "Clients supported"
-                      : "Clientes acompañados",
-              },
-              {
-                value: 15,
-                suffix: "+",
-                label:
-                  locale === "fr"
-                    ? "Experts Finance"
-                    : locale === "en"
-                      ? "Finance Experts"
-                      : "Expertos en Finanzas",
-              },
-              { value: 3, suffix: "", label: "BCN, Paris, TLS" },
-              { value: 5, suffix: "/5", label: "Trustfolio" },
-            ].map((stat, i) => (
-              <div
-                key={i}
-                className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10"
-              >
-                <div className="text-4xl lg:text-5xl font-bold text-iter-chartreuse mb-2">
-                  <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                </div>
-                <div className="text-sm text-white/60">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
+          {cmsStats ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={whyInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+            >
+              {cmsStats.map((stat, i) => {
+                const val = stat.value ?? "";
+                const numMatch = val.match(/(\d+)/);
+                const numVal = numMatch ? parseInt(numMatch[1], 10) : 0;
+                const prefix = val.replace(/\d+.*/, "");
+                const suffix = val.replace(/.*?\d+/, "");
+                return (
+                  <div
+                    key={stat.id ?? i}
+                    className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10"
+                  >
+                    <div className="text-4xl lg:text-5xl font-bold text-iter-chartreuse mb-2">
+                      {prefix}<AnimatedCounter target={numVal} suffix={suffix} />
+                    </div>
+                    <div className="text-sm text-white/60">{stat.label}</div>
+                  </div>
+                );
+              })}
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={whyInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+            >
+              {t.stats.map((stat, i) => {
+                const val = stat.value ?? "";
+                const numMatch = val.match(/(\d+)/);
+                const numVal = numMatch ? parseInt(numMatch[1], 10) : 0;
+                const suffix = val.replace(/.*?\d+/, "");
+                return (
+                  <div
+                    key={i}
+                    className="text-center p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10"
+                  >
+                    <div className="text-4xl lg:text-5xl font-bold text-iter-chartreuse mb-2">
+                      <AnimatedCounter target={numVal} suffix={suffix} />
+                    </div>
+                    <div className="text-sm text-white/60">
+                      <strong>{stat.bold}</strong>{stat.rest}
+                    </div>
+                  </div>
+                );
+              })}
+            </motion.div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {reasons.map((r, i) => (
-              <motion.div
-                key={r.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={whyInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
-                className="p-7 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-colors duration-300 group"
-              >
-                <div className="w-12 h-12 rounded-xl bg-iter-chartreuse/20 flex items-center justify-center mb-4 group-hover:bg-iter-chartreuse/30 transition-colors">
-                  <r.icon size={22} className="text-iter-chartreuse" />
-                </div>
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  {r.title}
-                </h3>
-                <p className="text-white/60 leading-relaxed text-sm">
-                  {r.desc}
-                </p>
-              </motion.div>
-            ))}
+            {(cmsWhyChoose ?? t.whyChoose.features).map((r, i) => {
+              const WhyIcon = whyIcons[i % whyIcons.length];
+              return (
+                <motion.div
+                  key={r.title + i}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={whyInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
+                  className="p-7 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-colors duration-300 group"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-iter-chartreuse/20 flex items-center justify-center mb-4 group-hover:bg-iter-chartreuse/30 transition-colors">
+                    <WhyIcon size={22} className="text-iter-chartreuse" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-white mb-3">
+                    {r.title}
+                  </h3>
+                  <p className="text-white/60 leading-relaxed text-sm">
+                    {r.description}
+                  </p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -949,32 +782,16 @@ export default function HomePage({
               transition={{ duration: 0.6 }}
             >
               <span className="inline-block px-3 py-1 rounded-full bg-iter-violet/10 text-iter-violet text-xs font-semibold uppercase tracking-widest mb-4">
-                {locale === "fr"
-                  ? "À propos"
-                  : locale === "en"
-                    ? "About"
-                    : "Sobre nosotros"}
+                {locale === "fr" ? "À propos" : locale === "en" ? "About" : "Sobre nosotros"}
               </span>
               <h2 className="text-3xl lg:text-4xl font-bold text-foreground leading-tight mb-6">
-                {locale === "fr"
-                  ? "Un cabinet né de l'entrepreneuriat, au service des entrepreneurs"
-                  : locale === "en"
-                    ? "A firm born from entrepreneurship, at the service of entrepreneurs"
-                    : "Una firma nacida del emprendimiento, al servicio de los emprendedores"}
+                {t.aboutTitle}
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                {locale === "fr"
-                  ? "À l'origine d'Iter Advisors, un constat : trop de projets porteurs échouent à cause d'une mauvaise gestion de leurs données financières. Nous souhaitons y remédier en donnant à nos clients toutes les clés pour faire de leur entreprise un succès."
-                  : locale === "en"
-                    ? "At the origin of Iter Advisors, an observation: too many promising projects fail due to poor management of their financial data. We want to remedy this by giving our clients all the keys to make their business a success."
-                    : "En el origen de Iter Advisors, una observación: demasiados proyectos prometedores fracasan por una mala gestión de sus datos financieros. Queremos remediarlo dando a nuestros clientes todas las claves para hacer de su empresa un éxito."}
+                {t.aboutP1}
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                {locale === "fr"
-                  ? "Notre équipe combine des parcours diversifiés : toutes tailles d'entreprise, tous secteurs, toutes industries. Nous adaptons nos services à chaque client avec un interlocuteur dédié et des outils performants."
-                  : locale === "en"
-                    ? "Our team combines diverse backgrounds: all company sizes, all sectors, all industries. We tailor our services to each client with a dedicated contact and high-performance tools."
-                    : "Nuestro equipo combina trayectorias diversificadas: todos los tamaños de empresa, todos los sectores, todas las industrias. Adaptamos nuestros servicios a cada cliente con un interlocutor dedicado y herramientas eficientes."}
+                {t.aboutP2}
               </p>
             </motion.div>
             <motion.div
@@ -1001,18 +818,10 @@ export default function HomePage({
               className="mb-12"
             >
               <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-3">
-                {locale === "fr"
-                  ? "Notre équipe"
-                  : locale === "en"
-                    ? "Our team"
-                    : "Nuestro equipo"}
+                {t.teamHeading}
               </h3>
               <p className="text-muted-foreground max-w-2xl">
-                {locale === "fr"
-                  ? "Un interlocuteur dédié à votre dossier, des outils performants adaptés à votre activité pour optimiser vos opérations au quotidien."
-                  : locale === "en"
-                    ? "A dedicated contact for your project, high-performance tools adapted to your activity to optimize your daily operations."
-                    : "Un interlocutor dedicado a su proyecto, herramientas eficientes adaptadas a su actividad para optimizar sus operaciones diarias."}
+                {t.teamSubtitle}
               </p>
             </motion.div>
 
@@ -1097,11 +906,7 @@ export default function HomePage({
                   : "Success Stories"}
             </span>
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-10">
-              {locale === "fr"
-                ? "Découvrez les témoignages de nos clients"
-                : locale === "en"
-                  ? "Discover our clients' testimonials"
-                  : "Descubra los testimonios de nuestros clientes"}
+              {t.successHeading}
             </h2>
             <a
               className="trustfolio-widget"
@@ -1113,11 +918,7 @@ export default function HomePage({
               rel="noopener noreferrer"
               href="https://trustfolio.co/profil/iter-advisors-q3yNQhXTUNc"
             >
-              {locale === "fr"
-                ? "Découvrez les témoignages de nos clients"
-                : locale === "en"
-                  ? "Discover our clients' testimonials"
-                  : "Descubra los testimonios de nuestros clientes"}
+              {t.successHeading}
             </a>
           </motion.div>
         </div>
@@ -1133,50 +934,37 @@ export default function HomePage({
             className="mb-20"
           >
             <span className="inline-block px-3 py-1 rounded-full bg-iter-violet/10 text-iter-violet text-xs font-semibold uppercase tracking-widest mb-4">
-              {locale === "fr"
-                ? "Accompagnement"
-                : locale === "en"
-                  ? "Support"
-                  : "Acompañamiento"}
+              {locale === "fr" ? "Accompagnement" : locale === "en" ? "Support" : "Acompañamiento"}
             </span>
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground leading-tight mb-6">
-              {locale === "fr"
-                ? "Quand faire appel à Iter Advisors ?"
-                : locale === "en"
-                  ? "When should you call Iter Advisors?"
-                  : "¿Cuándo llamar a Iter Advisors?"}
+              {t.whenHeading}
             </h2>
             <p className="text-muted-foreground max-w-2xl mb-12">
-              {locale === "fr"
-                ? "Nous nous intégrons à chaque étape de la vie de votre entreprise, en devenant le partenaire de confiance pour assurer et certifier votre gestion."
-                : locale === "en"
-                  ? "We integrate at every stage of your company's life, becoming the trusted partner to ensure and certify your management."
-                  : "Nos integramos en cada etapa de la vida de su empresa, convirtiéndonos en el socio de confianza para asegurar y certificar su gestión."}
+              {t.whenSubtitle}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-              {phases.map((phase, i) => (
-                <motion.div
-                  key={phase.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={whenInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
-                  className="relative p-5 rounded-2xl bg-muted/50 border border-border/50 hover:border-iter-violet/30 hover:bg-iter-violet/5 transition-all duration-300 group"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-iter-violet/10 flex items-center justify-center mb-3 group-hover:bg-iter-violet/20 transition-colors">
-                    <phase.icon size={18} className="text-iter-violet" />
-                  </div>
-                  <h4 className="text-sm font-semibold text-foreground mb-1">
-                    {phase.label}
-                  </h4>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {phase.desc}
-                  </p>
-                  {i < phases.length - 1 && (
-                    <div className="hidden lg:block absolute top-1/2 -right-2 w-4 h-px bg-iter-violet/20" />
-                  )}
-                </motion.div>
-              ))}
+              {t.phases.map((phase, i) => {
+                const PhaseIcon = phaseIcons[i] ?? Rocket;
+                return (
+                  <motion.div
+                    key={phase.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={whenInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.4, delay: 0.2 + i * 0.1 }}
+                    className="relative p-5 rounded-2xl bg-muted/50 border border-border/50 hover:border-iter-violet/30 hover:bg-iter-violet/5 transition-all duration-300 group"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-iter-violet/10 flex items-center justify-center mb-3 group-hover:bg-iter-violet/20 transition-colors">
+                      <PhaseIcon size={18} className="text-iter-violet" />
+                    </div>
+                    <h4 className="text-sm font-semibold text-foreground mb-1">{phase.label}</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed">{phase.desc}</p>
+                    {i < t.phases.length - 1 && (
+                      <div className="hidden lg:block absolute top-1/2 -right-2 w-4 h-px bg-iter-violet/20" />
+                    )}
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
 
@@ -1187,14 +975,10 @@ export default function HomePage({
             className="max-w-3xl"
           >
             <h3 className="text-2xl lg:text-3xl font-bold text-foreground mb-8">
-              {locale === "fr"
-                ? "Questions fréquentes"
-                : locale === "en"
-                  ? "Frequently asked questions"
-                  : "Preguntas frecuentes"}
+              {t.faqHeading}
             </h3>
             <div className="bg-card rounded-2xl border border-border/50 p-6 lg:p-8">
-              {faqs.map((faq) => (
+              {t.faqs.map((faq) => (
                 <FAQItem key={faq.q} {...faq} />
               ))}
             </div>
@@ -1288,18 +1072,10 @@ export default function HomePage({
             className="text-center max-w-3xl mx-auto"
           >
             <h2 className="text-3xl lg:text-5xl font-bold text-iter-dark leading-tight mb-6">
-              {locale === "fr"
-                ? "Parlons de votre projet"
-                : locale === "en"
-                  ? "Let's talk about your project"
-                  : "Hablemos de su proyecto"}
+              {t.contactHeading}
             </h2>
             <p className="text-lg text-iter-dark/70 leading-relaxed mb-10">
-              {locale === "fr"
-                ? "Faites les bons choix. Maintenant. Dites non au statu quo et faites le choix de la proximité, de l'efficacité et de la flexibilité avec Iter Advisors."
-                : locale === "en"
-                  ? "Make the right choices. Now. Say no to the status quo and choose proximity, efficiency and flexibility with Iter Advisors."
-                  : "Tome las decisiones correctas. Ahora. Diga no al statu quo y elija la proximidad, la eficiencia y la flexibilidad con Iter Advisors."}
+              {t.contactSubtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -1317,11 +1093,7 @@ export default function HomePage({
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border-2 border-iter-dark/30 text-iter-dark font-medium text-base hover:bg-iter-dark/5 transition-all duration-300"
               >
                 <Mail size={18} />
-                {locale === "fr"
-                  ? "Nous écrire"
-                  : locale === "en"
-                    ? "Email us"
-                    : "Escríbenos"}
+                {t.emailCta}
               </a>
             </div>
           </motion.div>
