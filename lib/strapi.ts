@@ -308,6 +308,7 @@ export interface StrapiTeamMember {
   photo?: StrapiMedia | null;
   linkedIn?: string;
   order: number;
+  showInHero?: boolean;
 }
 
 export interface StrapiTestimonial {

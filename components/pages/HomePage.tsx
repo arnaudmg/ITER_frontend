@@ -232,34 +232,7 @@ const faqs = [
   },
 ];
 
-/* ─── Hero avatars (experts +15) ─── */
-const HERO_AVATARS = [
-  {
-    initials: "SD",
-    imageUrl:
-      "https://www.iteradvisors.com/wp-content/uploads/2025/02/Sebastien-Doat.jpg",
-  },
-  {
-    initials: "BZ",
-    imageUrl:
-      "https://www.iteradvisors.com/wp-content/uploads/2025/02/Benjamin-Ziza-1.jpg",
-  },
-  {
-    initials: "GR",
-    imageUrl:
-      "https://media.licdn.com/dms/image/v2/C4E03AQGgR2KbIfoKCw/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1654078467159?e=1773273600&v=beta&t=8hcsomErfYQ2A3YhCbNXCkPukxjUmhkvn8wFbOdr240",
-  },
-  {
-    initials: "QM",
-    imageUrl:
-      "https://media.licdn.com/dms/image/v2/D4D03AQFIqGv0Fsti8Q/profile-displayphoto-shrink_800_800/B4DZWkDql6HYAg-/0/1742214179833?e=1773273600&v=beta&t=mApj3PPgDtL75V5I27El7Mo3_Yb37uMs8BN70L_a49g",
-  },
-  {
-    initials: "DA",
-    imageUrl:
-      "https://media.licdn.com/dms/image/v2/D4E03AQFdSVqXJcbnMg/profile-displayphoto-crop_800_800/B4EZqSdmfUKoAI-/0/1763393826063?e=1773273600&v=beta&t=0l230nbTC-dwqYTq-6KjM7k_FDIXd6upB1A-51JiXJw",
-  }, // pas d'image fournie — remplacer par l'URL si disponible
-];
+/* ─── Hero avatars: driven by Team Member showInHero boolean ─── */
 
 /* ─── Service Card ─── */
 function ServiceCard({
@@ -343,6 +316,14 @@ export default function HomePage({
 }) {
   const t = getHomeContent(locale);
   const contactPath = getContactPath(locale);
+
+  const heroAvatars = strapiTeam
+    .filter((m) => m.showInHero && m.photo)
+    .map((m) => ({
+      initials: `${m.firstName?.[0] ?? ""}${m.lastName?.[0] ?? ""}`.toUpperCase(),
+      imageUrl: strapiMediaUrl(m.photo),
+      name: `${m.firstName} ${m.lastName}`.trim(),
+    }));
 
   const servicesRef = useRef<HTMLDivElement>(null);
   const servicesInView = useInView(servicesRef, {
@@ -480,7 +461,7 @@ export default function HomePage({
             <div className="mt-14 flex flex-wrap items-center gap-8 animate-[fadeInUp_0.7s_ease-out_0.65s_both]">
               <div className="flex items-center gap-3">
                 <div className="flex -space-x-2">
-                  {HERO_AVATARS.map((avatar) => (
+                  {heroAvatars.map((avatar) => (
                     <div
                       key={avatar.initials}
                       className="w-8 h-8 rounded-full bg-white/20 border-2 border-iter-violet flex items-center justify-center overflow-hidden shrink-0"
@@ -488,7 +469,7 @@ export default function HomePage({
                       {avatar.imageUrl ? (
                         <Image
                           src={avatar.imageUrl}
-                          alt={avatar.initials}
+                          alt={avatar.name}
                           width={32}
                           height={32}
                           className="object-cover w-full h-full"
@@ -502,7 +483,11 @@ export default function HomePage({
                     </div>
                   ))}
                 </div>
-                <span className="text-white/60 text-sm">+15 experts</span>
+                {strapiTeam.length > heroAvatars.length && (
+                  <span className="text-white/60 text-sm">
+                    +{strapiTeam.length - heroAvatars.length} experts
+                  </span>
+                )}
               </div>
               <div className="h-8 w-px bg-white/20 hidden sm:block" />
               <div className="flex items-center gap-2">
