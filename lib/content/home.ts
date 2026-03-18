@@ -50,8 +50,8 @@ export const homeContent = {
     ],
     stats: [
       { value: "+85", bold: "Entreprises accompagnées", rest: " par Iter Advisors" },
-      { value: "+80\u00A0M", bold: "Levées de fonds", rest: " par nos clients depuis 2021" },
-      { value: "15", bold: "Collaborateurs", rest: " experts de la fonction Finance au service de nos clients" },
+      { value: "+100\u00A0M", bold: "Levées de fonds", rest: " par nos clients depuis 2021" },
+      { value: "15", bold: "Consultants", rest: " experts de la fonction Finance au service de nos clients" },
       { value: "30", bold: "Partenaires technologiques", rest: " au service de la performance financière" },
     ],
     whyChoose: {
@@ -226,8 +226,8 @@ export const homeContent = {
     ],
     stats: [
       { value: "+85", bold: "Companies supported", rest: " by Iter Advisors" },
-      { value: "+80\u00A0M", bold: "Funds raised by", rest: " our customers since 2021" },
-      { value: "15", bold: "Employees", rest: " Finance experts at the service of our customers" },
+      { value: "+100\u00A0M", bold: "Funds raised by", rest: " our customers since 2021" },
+      { value: "15", bold: "Consultants", rest: " Finance experts at the service of our customers" },
       { value: "30", bold: "Technology partners", rest: " for financial performance" },
     ],
     whyChoose: {
@@ -402,8 +402,8 @@ export const homeContent = {
     ],
     stats: [
       { value: "+85", bold: "Empresas acompañadas", rest: " por Iter Advisors" },
-      { value: "+80\u00A0M", bold: "Fondos recaudados por", rest: " nuestros clientes desde 2021" },
-      { value: "15", bold: "Colaboradores", rest: " expertos en finanzas al servicio de nuestros clientes" },
+      { value: "+100\u00A0M", bold: "Fondos recaudados por", rest: " nuestros clientes desde 2021" },
+      { value: "15", bold: "Consultores", rest: " expertos en finanzas al servicio de nuestros clientes" },
       { value: "30", bold: "Socios tecnológicos", rest: " al servicio del rendimiento financiero" },
     ],
     whyChoose: {
