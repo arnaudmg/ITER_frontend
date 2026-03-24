@@ -15,7 +15,8 @@ function getResend(): Resend {
   return _resend;
 }
 
-const RECIPIENT_EMAIL = "guillaume@frenchtechbarcelona.com";
+const RECIPIENT_EMAIL = process.env.LEAD_RECIPIENT_EMAIL || "contact@iteradvisors.com";
+const SENDER_EMAIL = process.env.LEAD_SENDER_EMAIL || "contact@iteradvisors.com";
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,11 +48,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Send email via Resend
+    const senderReplyTo = data?.email ? [data.email] : undefined;
+
     const { error } = await getResend().emails.send({
-      from: "Iter Advisors Leads <onboarding@resend.dev>",
+      from: `Iter Advisors Leads <${SENDER_EMAIL}>`,
       to: [RECIPIENT_EMAIL],
       subject,
       html: htmlContent,
+      replyTo: senderReplyTo,
     });
 
     if (error) {

@@ -34,3 +34,22 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+### Rebuild when Strapi content is published
+
+The site uses static export; content from Strapi is baked in at build time. To trigger a Vercel rebuild whenever you publish in Strapi, use a Strapi webhook calling a Vercel Deploy Hook. See [docs/STRAPI_VERCEL_WEBHOOK.md](docs/STRAPI_VERCEL_WEBHOOK.md).
+
+### Lead emails with Resend
+
+The lead form posts to `app/api/lead/route.ts`, which sends an email through Resend.
+
+Required environment variables:
+
+- `RESEND_API_KEY`: your Resend API key
+
+Optional environment variables:
+
+- `LEAD_RECIPIENT_EMAIL`: destination inbox (default: `contact@iteradvisors.com`)
+- `LEAD_SENDER_EMAIL`: sender address (default: `contact@iteradvisors.com`)
+
+For production on Vercel, add those variables in Project Settings -> Environment Variables, then redeploy.
