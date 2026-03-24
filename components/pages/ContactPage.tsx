@@ -135,40 +135,50 @@ export default function ContactPage({
   const officesRef = useRef<HTMLDivElement>(null);
   const officesInView = useInView(officesRef, { once: true, margin: "-60px" });
 
+  const [error, setError] = useState("");
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setPending(true);
+    setError("");
 
     const form = e.currentTarget;
-    const data = new FormData(form);
+    const fd = new FormData(form);
 
-    if (data.get("website")) {
+    if (fd.get("website")) {
       setPending(false);
       return;
     }
 
-    const payload = Object.fromEntries(data.entries());
-    delete payload.website;
+    const data = Object.fromEntries(fd.entries());
+    delete data.website;
 
-    const webhookUrl = process.env.NEXT_PUBLIC_WEBHOOK_URL;
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ source: "contact", data }),
+      });
 
-    if (webhookUrl) {
-      try {
-        await fetch(webhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-      } catch (err) {
-        console.error("Webhook error:", err);
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.details || "Erreur serveur");
       }
-    } else {
-      console.log("Contact form submission:", payload);
-    }
 
-    setPending(false);
-    setSuccess(true);
-    form.reset();
+      setSuccess(true);
+      form.reset();
+    } catch (err) {
+      console.error("Contact form error:", err);
+      setError(
+        locale === "fr"
+          ? "Une erreur est survenue. Veuillez réessayer ou nous contacter par email."
+          : locale === "es"
+            ? "Se ha producido un error. Inténtelo de nuevo o contáctenos por email."
+            : "Something went wrong. Please try again or contact us by email.",
+      );
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
@@ -264,6 +274,12 @@ export default function ContactPage({
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-5">
+                    {error && (
+                      <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-sm text-red-700">
+                        {error}
+                      </div>
+                    )}
+
                     {/* Honeypot */}
                     <div className="absolute -left-[9999px]" aria-hidden="true">
                       <label htmlFor="website">

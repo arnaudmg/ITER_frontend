@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-// Force dynamic rendering to avoid build-time initialization
 export const dynamic = "force-dynamic";
 
-// Resend is initialized lazily to avoid build-time errors
 let _resend: Resend | null = null;
 function getResend(): Resend {
   if (!_resend) {
@@ -15,10 +13,8 @@ function getResend(): Resend {
   return _resend;
 }
 
-const RECIPIENT_EMAIL =
-  process.env.LEAD_RECIPIENT_EMAIL || "contact@iteradvisors.com";
-const SENDER_EMAIL =
-  process.env.LEAD_SENDER_EMAIL || "leads@crm.iteradvisors.com";
+const TO = process.env.LEAD_RECIPIENT_EMAIL || "contact@iteradvisors.com";
+const FROM = "Iter Advisors <leads@crm.iteradvisors.com>";
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,46 +28,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Build email content based on source
-    let subject = "";
-    let htmlContent = "";
+    const subject = buildSubject(source, data);
+    const text = buildPlainText(source, data);
+    const replyTo = data?.email ? [data.email] : undefined;
 
-    if (source === "profil") {
-      // Lead from /profil diagnostic page
-      subject = `🔥 Nouveau Lead Diagnostic — ${data.firstName || ""} ${data.lastName || ""} (${data.company || "N/A"})`;
-      htmlContent = buildProfilEmail(data);
-    } else if (source === "campagne") {
-      // Lead from /campagne CTA (contact request)
-      subject = `📩 Demande de contact Campagne — ${data.firstName || ""} ${data.lastName || ""} (${data.company || "N/A"})`;
-      htmlContent = buildCampagneEmail(data);
-    } else {
-      subject = `📋 Nouveau Lead Iter Advisors — ${data.email || "N/A"}`;
-      htmlContent = buildGenericEmail(data);
-    }
-
-    // Send email via Resend
-    const senderReplyTo = data?.email ? [data.email] : undefined;
-
-    const { error } = await getResend().emails.send({
-      from: `Iter Advisors Leads <${SENDER_EMAIL}>`,
-      to: [RECIPIENT_EMAIL],
+    const { data: result, error } = await getResend().emails.send({
+      from: FROM,
+      to: [TO],
       subject,
-      html: htmlContent,
-      replyTo: senderReplyTo,
+      text,
+      replyTo,
     });
 
     if (error) {
-      console.error("Resend error:", error);
+      console.error("Resend error:", JSON.stringify(error, null, 2));
       return NextResponse.json(
-        { error: "Failed to send email" },
+        { error: "Failed to send email", details: error.message },
         { status: 500 },
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Lead sent successfully",
-    });
+    console.log("Email sent:", result?.id);
+    return NextResponse.json({ success: true });
   } catch (err) {
     console.error("API error:", err);
     return NextResponse.json(
@@ -81,103 +59,60 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function buildProfilEmail(data: Record<string, string>): string {
-  const fields = [
-    { label: "Prénom", value: data.firstName },
-    { label: "Nom", value: data.lastName },
-    { label: "Entreprise", value: data.company },
-    { label: "Email", value: data.email },
-    { label: "Téléphone", value: data.phone },
-    { label: "Stade de développement", value: data.stage },
-    { label: "Enjeu financier", value: data.challenge },
-    { label: "Taille de l'équipe", value: data.teamSize },
-    { label: "Urgence", value: data.urgency },
-  ];
+function buildSubject(
+  source: string,
+  data: Record<string, string>,
+): string {
+  const name = [data.firstName, data.lastName].filter(Boolean).join(" ");
+  const company = data.company || "";
+  const who = [name, company].filter(Boolean).join(" — ");
 
-  return `
-    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa; padding: 20px;">
-      <div style="background: #3400F0; padding: 24px; border-radius: 12px 12px 0 0;">
-        <h1 style="color: #CCFF00; margin: 0; font-size: 22px;">🔥 Nouveau Lead — Diagnostic Financier</h1>
-        <p style="color: #ffffff; margin: 8px 0 0; font-size: 14px;">Page source : /profil</p>
-      </div>
-      <div style="background: #ffffff; padding: 24px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb;">
-        <table style="width: 100%; border-collapse: collapse;">
-          ${fields
-            .filter((f) => f.value)
-            .map(
-              (f) => `
-            <tr style="border-bottom: 1px solid #f0f0f0;">
-              <td style="padding: 12px 8px; font-weight: 600; color: #374151; width: 40%; font-size: 14px;">${f.label}</td>
-              <td style="padding: 12px 8px; color: #111827; font-size: 14px;">${f.value}</td>
-            </tr>
-          `,
-            )
-            .join("")}
-        </table>
-        <div style="margin-top: 20px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
-          <p style="margin: 0; font-size: 13px; color: #6b7280;">
-            Lead reçu le ${new Date().toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })}
-          </p>
-        </div>
-      </div>
-    </div>
-  `;
+  switch (source) {
+    case "contact":
+      return `Nouveau message contact — ${who || data.email || "N/A"}`;
+    case "profil":
+      return `Nouveau lead diagnostic — ${who || data.email || "N/A"}`;
+    case "campagne":
+      return `Demande de contact campagne — ${who || data.email || "N/A"}`;
+    default:
+      return `Nouveau lead Iter Advisors — ${data.email || "N/A"}`;
+  }
 }
 
-function buildCampagneEmail(data: Record<string, string>): string {
-  const fields = [
-    { label: "Prénom", value: data.firstName },
-    { label: "Nom", value: data.lastName },
-    { label: "Entreprise", value: data.company },
-    { label: "Email", value: data.email },
-    { label: "Téléphone", value: data.phone },
-    { label: "Message", value: data.message },
-  ];
+function buildPlainText(
+  source: string,
+  data: Record<string, string>,
+): string {
+  const date = new Date().toLocaleDateString("fr-FR", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
-  return `
-    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa; padding: 20px;">
-      <div style="background: #3400F0; padding: 24px; border-radius: 12px 12px 0 0;">
-        <h1 style="color: #CCFF00; margin: 0; font-size: 22px;">📩 Demande de Contact — Campagne</h1>
-        <p style="color: #ffffff; margin: 8px 0 0; font-size: 14px;">Page source : /campagne</p>
-      </div>
-      <div style="background: #ffffff; padding: 24px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb;">
-        <table style="width: 100%; border-collapse: collapse;">
-          ${fields
-            .filter((f) => f.value)
-            .map(
-              (f) => `
-            <tr style="border-bottom: 1px solid #f0f0f0;">
-              <td style="padding: 12px 8px; font-weight: 600; color: #374151; width: 40%; font-size: 14px;">${f.label}</td>
-              <td style="padding: 12px 8px; color: #111827; font-size: 14px;">${f.value}</td>
-            </tr>
-          `,
-            )
-            .join("")}
-        </table>
-        <div style="margin-top: 20px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
-          <p style="margin: 0; font-size: 13px; color: #6b7280;">
-            Lead reçu le ${new Date().toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })}
-          </p>
-        </div>
-      </div>
-    </div>
-  `;
-}
+  const fieldLabels: Record<string, string> = {
+    firstName: "Prénom",
+    lastName: "Nom",
+    company: "Entreprise",
+    email: "Email",
+    phone: "Téléphone",
+    message: "Message",
+    stage: "Stade de développement",
+    challenge: "Enjeu financier",
+    teamSize: "Taille de l'équipe",
+    urgency: "Urgence",
+  };
 
-function buildGenericEmail(data: Record<string, string>): string {
-  return `
-    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa; padding: 20px;">
-      <div style="background: #3400F0; padding: 24px; border-radius: 12px 12px 0 0;">
-        <h1 style="color: #CCFF00; margin: 0; font-size: 22px;">📋 Nouveau Lead — Iter Advisors</h1>
-      </div>
-      <div style="background: #ffffff; padding: 24px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb;">
-        <pre style="white-space: pre-wrap; font-size: 14px; color: #374151;">${JSON.stringify(data, null, 2)}</pre>
-        <div style="margin-top: 20px; padding: 16px; background: #f0f4ff; border-radius: 8px;">
-          <p style="margin: 0; font-size: 13px; color: #6b7280;">
-            Lead reçu le ${new Date().toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit" })}
-          </p>
-        </div>
-      </div>
-    </div>
-  `;
+  const lines = Object.entries(data)
+    .filter(([, v]) => v)
+    .map(([k, v]) => `${fieldLabels[k] || k}: ${v}`);
+
+  return [
+    `Source: ${source}`,
+    `Date: ${date}`,
+    "",
+    ...lines,
+  ].join("\n");
 }
