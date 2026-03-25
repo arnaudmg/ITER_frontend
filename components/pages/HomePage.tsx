@@ -240,7 +240,7 @@ export default function HomePage({
   useEffect(() => {
     const interval = setInterval(() => {
       setHeroHighlightIndex((prev) => (prev === 0 ? 1 : 0));
-    }, 3000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
   const heroSubtitle = homepage?.heroSubtitle || t.hero.h2;
@@ -394,8 +394,9 @@ export default function HomePage({
                         initial={{ y: "100%", opacity: 0 }}
                         animate={{ y: "0%", opacity: 1 }}
                         exit={{ y: "-100%", opacity: 0 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="block text-iter-chartreuse"
+                        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                        className="block"
+                        style={{ color: heroHighlightIndex === 0 ? "#FFFFFF" : "#AAFF00" }}
                       >
                         {heroHighlightIndex === 0 ? t.hero.h1.highlight : (t.hero.h1 as any).highlightAlt}
                       </motion.span>
