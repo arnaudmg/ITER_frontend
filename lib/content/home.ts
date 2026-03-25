@@ -8,7 +8,7 @@ export const homeContent = {
         "Iter Advisors : DAF externalisé pour PME et startups (pilotage, cash, reporting, levée de fonds). Intervention flexible à Barcelone, Paris, Toulouse.",
     },
     hero: {
-      h1: { before: "La meilleure version de votre ", highlight: "direction financière", highlightAlt: "direction RH", after: "" },
+      h1: { before: "La meilleure version de votre ", highlight: "direction financière", highlightAlt: "direction des ressources humaines", after: "" },
       h2: "Cabinet de conseil en finance d\u2019entreprise, DAF externalisé et DRH externalisé. Nous structurons, pilotons et optimisons vos fonctions support pour une croissance saine et durable.",
       cta: "Prendre rendez-vous",
     },
@@ -186,7 +186,7 @@ export const homeContent = {
         "Iter Advisors, votre DAF externe. Accompagnement expert en gestion financière externalisée, levée de fonds et opérations M&A.",
     },
     hero: {
-      h1: { before: "The best version of your ", highlight: "financial management", highlightAlt: "HR management", after: "" },
+      h1: { before: "The best version of your ", highlight: "financial management", highlightAlt: "human resources management", after: "" },
       h2: "Corporate finance consultancy, outsourced CFO and outsourced HR. We structure, manage and optimize your support functions for healthy, sustainable growth.",
       cta: "Make an appointment",
     },
@@ -364,7 +364,7 @@ export const homeContent = {
         "Iter Advisors, vuestro CFO externo. Apoyo experto en gestión financiera externalizada, financiación y operaciones de fusiones y adquisiciones.",
     },
     hero: {
-      h1: { before: "La mejor versión de su ", highlight: "dirección financiera", highlightAlt: "dirección de RRHH", after: "" },
+      h1: { before: "La mejor versión de su ", highlight: "dirección financiera", highlightAlt: "dirección de recursos humanos", after: "" },
       h2: "Consultoría en finanzas corporativas, CFO externalizado y RRHH externalizado. Estructuramos, pilotamos y optimizamos sus funciones de soporte para un crecimiento sano y sostenible.",
       cta: "Concierte una cita",
     },
