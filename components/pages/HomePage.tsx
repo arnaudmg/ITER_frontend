@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import Script from "next/script";
+// Script import removed - trustfolio loaded lazily via IntersectionObserver
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import {
@@ -168,6 +168,47 @@ function FAQItem({ q, a }: { q: string; a: string }) {
   );
 }
 
+/* ─── Trustfolio Lazy Section ─── */
+const TRUSTFOLIO_SCRIPT_URL = "https://share.trustfolio.co/scripts/embed-v2.js";
+
+function TrustfolioLazySection({
+  sectionRef,
+  children,
+}: {
+  sectionRef: React.RefObject<HTMLDivElement | null>;
+  children: React.ReactNode;
+}) {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!sectionRef.current || loaded) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          const script = document.createElement("script");
+          script.src = TRUSTFOLIO_SCRIPT_URL;
+          script.async = true;
+          script.defer = true;
+          document.body.appendChild(script);
+          setLoaded(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px" }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, [sectionRef, loaded]);
+
+  return (
+    <section className="py-24 lg:py-32 bg-background">
+      <div className="container text-center" ref={sectionRef}>
+        {children}
+      </div>
+    </section>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════════ */
 /*                        HOME PAGE                           */
 /* ═══════════════════════════════════════════════════════════ */
@@ -269,11 +310,12 @@ export default function HomePage({
       >
         <div className="absolute inset-0">
           <Image
-            src="/images/bg/bg-hero-3d.jpg"
+            src="/images/bg/bg-hero-3d.webp"
             alt=""
             fill
             className="object-cover"
             priority
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-iter-violet/90 via-iter-violet/80 to-iter-dark/90" />
         </div>
@@ -489,7 +531,7 @@ export default function HomePage({
             >
               <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-iter-violet/10">
                 <Image
-                  src="/images/bg/daf-section.jpg"
+                  src="/images/bg/daf-section.webp"
                   alt="Consultants financiers collaborant dans un bureau moderne"
                   width={600}
                   height={520}
@@ -580,7 +622,7 @@ export default function HomePage({
       <section className="py-24 lg:py-32 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <Image
-            src="/images/bg/bg-3d.jpg"
+            src="/images/bg/bg-3d.webp"
             alt=""
             fill
             className="object-cover"
@@ -786,7 +828,7 @@ export default function HomePage({
               className="rounded-3xl overflow-hidden shadow-xl"
             >
               <Image
-                src="/images/bg/about-section.jpg"
+                src="/images/bg/about-section.webp"
                 alt="Équipe Iter Advisors collaborant autour de dashboards financiers et RH"
                 width={600}
                 height={420}
@@ -872,12 +914,7 @@ export default function HomePage({
       </section>
 
       {/* ═══ SUCCESS STORIES ═══ */}
-      <section className="py-24 lg:py-32 bg-background">
-        <Script
-          src="https://share.trustfolio.co/scripts/embed-v2.js"
-          strategy="afterInteractive"
-        />
-        <div className="container text-center" ref={successRef}>
+      <TrustfolioLazySection sectionRef={successRef}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={successInView ? { opacity: 1, y: 0 } : {}}
@@ -906,8 +943,7 @@ export default function HomePage({
               {t.successHeading}
             </a>
           </motion.div>
-        </div>
-      </section>
+      </TrustfolioLazySection>
 
       {/* ═══ WHEN + FAQ SECTION ═══ */}
       <section className="py-24 lg:py-32 bg-background">
