@@ -1,8 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import Script from "next/script";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Locale } from "@/lib/i18n";
 
 const content: Record<
@@ -38,10 +37,31 @@ export default function TestimonialsSection({ locale }: { locale: Locale }) {
   const t = content[locale];
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+
+  // Lazy load trustfolio script only when section is near viewport
+  useEffect(() => {
+    if (!ref.current || scriptLoaded) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          const script = document.createElement("script");
+          script.src = TRUSTFOLIO_SCRIPT_URL;
+          script.async = true;
+          script.defer = true;
+          document.body.appendChild(script);
+          setScriptLoaded(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [scriptLoaded]);
 
   return (
     <section className="py-24 lg:py-32 bg-muted/30 relative overflow-hidden">
-      <Script src={TRUSTFOLIO_SCRIPT_URL} strategy="afterInteractive" />
       <div className="container text-center" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
