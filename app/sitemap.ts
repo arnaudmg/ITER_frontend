@@ -69,6 +69,20 @@ const BLOG_SLUGS = [
   "regimes-fiscaux-france-vs-espagne",
   "ia-act-opportunite-fintechs",
   "anticiper-financierement-ses-recrutements-guide-pratique",
+  /* ── Nouveaux articles SEO cluster DAF externalisé ──────────────── */
+  "cout-daf-externalise",
+  "daf-externalise-startup",
+  "daf-externalise-vs-comptable",
+  "pme-besoin-daf-externalise",
+  "daf-externalise-vs-daf-interne",
+  "daf-externalise-levee-de-fonds",
+  "missions-daf-externalise-temps-partage",
+  "choisir-cabinet-daf-externalise",
+  "management-transition-financiere",
+  "direction-financiere-externalisee",
+  "outils-daf-externalise-2026",
+  "daf-externalise-barcelone",
+  "previsionnel-tresorerie-guide-pme",
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -201,6 +215,62 @@ export default function sitemap(): MetadataRoute.Sitemap {
   entries.push(
     ...entryAllLocales(
       { fr: "/profil", en: "/profil", es: "/profil" },
+      { priority: 0.8 }
+    )
+  );
+
+  /* ── Pages locales DAF externalisé ────────────────────────────── */
+  entries.push(
+    ...entryAllLocales(
+      { fr: "/daf-externalise-barcelone", en: "/outsourced-cfo-barcelona", es: "/cfo-externalizado-barcelona" },
+      { priority: 0.8 }
+    )
+  );
+  entries.push(
+    ...entryAllLocales(
+      { fr: "/daf-externalise-paris", en: "/outsourced-cfo-paris", es: "/cfo-externalizado-paris" },
+      { priority: 0.8 }
+    )
+  );
+  entries.push(
+    ...entryAllLocales(
+      { fr: "/daf-externalise-toulouse", en: "/outsourced-cfo-toulouse", es: "/cfo-externalizado-toulouse" },
+      { priority: 0.8 }
+    )
+  );
+
+  /* ── Nouvelles fiches metier ────────────────────────────────────── */
+  entries.push(
+    ...entryAllLocales(
+      { fr: "/ressources/fiche-metier/daf-externalise", en: "/ressources/fiche-metier/fractional-cfo", es: "/ressources/fiche-metier/cfo-externalizado" },
+      { priority: 0.7 }
+    )
+  );
+  entries.push(
+    ...entryAllLocales(
+      { fr: "/ressources/fiche-metier/directeur-financier", en: "/ressources/fiche-metier/chief-financial-officer", es: "/ressources/fiche-metier/director-financiero" },
+      { priority: 0.7 }
+    )
+  );
+
+  /* ── Nouvelles entrees glossaire ────────────────────────────────── */
+  entries.push(
+    ...entryAllLocales(
+      { fr: "/ressources/glossaire/bfr-besoin-fonds-roulement", en: "/ressources/glossaire/working-capital-requirement", es: "/ressources/glossaire/necesidad-fondo-maniobra" },
+      { priority: 0.6 }
+    )
+  );
+  entries.push(
+    ...entryAllLocales(
+      { fr: "/ressources/glossaire/due-diligence-definition", en: "/ressources/glossaire/due-diligence-definition", es: "/ressources/glossaire/due-diligence-definicion" },
+      { priority: 0.6 }
+    )
+  );
+
+  /* ── Service M&A & Due Diligence ────────────────────────────────── */
+  entries.push(
+    ...entryAllLocales(
+      { fr: "/services/ma-due-diligence", en: "/services/ma-due-diligence", es: "/services/ma-due-diligence" },
       { priority: 0.8 }
     )
   );
