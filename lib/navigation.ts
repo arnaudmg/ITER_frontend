@@ -8,11 +8,18 @@ export interface NavItem {
   megaMenu?: boolean;
 }
 
+export interface FooterLocation {
+  city: string;
+  country: string;
+  href: string;
+}
+
 export interface FooterContent {
   description: string;
   copyright: string;
   trustfolio: string;
   legalLinks: { text: string; href: string }[];
+  locations: FooterLocation[];
 }
 
 const navFr: NavItem[] = [
@@ -23,6 +30,9 @@ const navFr: NavItem[] = [
       { text: "DAF à Temps Partagé", href: "/daf-externalise/temps-partage" },
       { text: "DAF de Transition", href: "/daf-externalise/transition" },
       { text: "DAF : Métier", href: "/daf-externalise/metier" },
+      { text: "DAF externalisé Barcelone", href: "/daf-externalise-barcelone" },
+      { text: "DAF externalisé Paris", href: "/daf-externalise-paris" },
+      { text: "DAF externalisé Toulouse", href: "/daf-externalise-toulouse" },
     ],
   },
   {
@@ -73,6 +83,9 @@ const navEn: NavItem[] = [
       { text: "Shared-time CFO", href: "/en/daf-outsourcing/shared-time" },
       { text: "Transitional CFO", href: "/en/daf-outsourcing/transition" },
       { text: "CFO : The Mission", href: "/en/daf-outsourcing/metier" },
+      { text: "Outsourced CFO Barcelona", href: "/en/outsourced-cfo-barcelona" },
+      { text: "Outsourced CFO Paris", href: "/en/outsourced-cfo-paris" },
+      { text: "Outsourced CFO Toulouse", href: "/en/outsourced-cfo-toulouse" },
     ],
   },
   {
@@ -119,6 +132,9 @@ const navEs: NavItem[] = [
       { text: "CFO a Tiempo Compartido", href: "/es/externalizacion-daf/multipropiedad" },
       { text: "CFO de transición", href: "/es/externalizacion-daf/transition" },
       { text: "CFO : Perfil profesional", href: "/es/externalizacion-daf/metier" },
+      { text: "CFO externalizado Barcelona", href: "/es/cfo-externalizado-barcelona" },
+      { text: "CFO externalizado Paris", href: "/es/cfo-externalizado-paris" },
+      { text: "CFO externalizado Toulouse", href: "/es/cfo-externalizado-toulouse" },
     ],
   },
   {
@@ -173,6 +189,11 @@ export const footerContent: Record<Locale, FooterContent> = {
       { text: "Mentions légales", href: "/mentions-legales" },
       { text: "Politique de confidentialité", href: "/politique-de-confidentialite" },
     ],
+    locations: [
+      { city: "Barcelone", country: "Espagne", href: "/daf-externalise-barcelone" },
+      { city: "Paris", country: "France", href: "/daf-externalise-paris" },
+      { city: "Toulouse", country: "France", href: "/daf-externalise-toulouse" },
+    ],
   },
   en: {
     description:
@@ -183,6 +204,11 @@ export const footerContent: Record<Locale, FooterContent> = {
       { text: "Terms of use", href: "/en/legal-notice" },
       { text: "Privacy policy", href: "/en/privacy-policy" },
     ],
+    locations: [
+      { city: "Barcelona", country: "Spain", href: "/en/outsourced-cfo-barcelona" },
+      { city: "Paris", country: "France", href: "/en/outsourced-cfo-paris" },
+      { city: "Toulouse", country: "France", href: "/en/outsourced-cfo-toulouse" },
+    ],
   },
   es: {
     description:
@@ -192,6 +218,11 @@ export const footerContent: Record<Locale, FooterContent> = {
     legalLinks: [
       { text: "Información jurídica", href: "/es/aviso-legal" },
       { text: "Política de privacidad", href: "/es/politica-de-privacidad" },
+    ],
+    locations: [
+      { city: "Barcelona", country: "España", href: "/es/cfo-externalizado-barcelona" },
+      { city: "Paris", country: "Francia", href: "/es/cfo-externalizado-paris" },
+      { city: "Toulouse", country: "Francia", href: "/es/cfo-externalizado-toulouse" },
     ],
   },
 };
