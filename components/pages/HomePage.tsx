@@ -243,16 +243,33 @@ export default function HomePage({
   const t = getHomeContent(locale);
   const contactPath = getContactPath(locale);
 
-  const heroTitle = homepage?.heroTitle || `${t.hero.h1.before}${t.hero.h1.highlight}${t.hero.h1.after}`;
+  const heroTitleRaw = homepage?.heroTitle || `${t.hero.h1.before}${t.hero.h1.highlight}${t.hero.h1.after}`;
 
-  // Animated hero highlight: alternate between "direction financiere" and "direction RH"
+  // ─── Hero text rotator ───
+  // Detect the finance keyword inside the CMS heroTitle and split
+  // the string into before / keyword / after so we can animate it.
+  const ROTATOR_MAP: Record<Locale, { keyword: string; alt: string }> = {
+    fr: { keyword: "direction financi\u00e8re", alt: "direction des ressources humaines" },
+    en: { keyword: "financial management", alt: "human resources management" },
+    es: { keyword: "direcci\u00f3n financiera", alt: "direcci\u00f3n de recursos humanos" },
+  };
+
+  const rotator = ROTATOR_MAP[locale];
+  const keywordIndex = heroTitleRaw.toLowerCase().indexOf(rotator.keyword.toLowerCase());
+  const hasRotator = keywordIndex !== -1;
+
+  const heroBefore = hasRotator ? heroTitleRaw.slice(0, keywordIndex) : "";
+  const heroKeyword = hasRotator ? heroTitleRaw.slice(keywordIndex, keywordIndex + rotator.keyword.length) : "";
+  const heroAfter = hasRotator ? heroTitleRaw.slice(keywordIndex + rotator.keyword.length) : "";
+
   const [heroHighlightIndex, setHeroHighlightIndex] = useState(0);
   useEffect(() => {
+    if (!hasRotator) return;
     const interval = setInterval(() => {
       setHeroHighlightIndex((prev) => (prev === 0 ? 1 : 0));
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [hasRotator]);
   const heroSubtitle = homepage?.heroSubtitle || t.hero.h2;
   const heroCtaLabel = t.hero.cta;
   const heroCtaUrl = BOOKING_URL;
@@ -386,11 +403,9 @@ export default function HomePage({
           <div className="max-w-4xl animate-[fadeInUp_0.8s_ease-out_both]">
 
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white leading-[1.08] tracking-tight mb-5 animate-[fadeInUp_0.7s_ease-out_0.2s_both]">
-              {homepage?.heroTitle ? (
-                heroTitle
-              ) : (
+              {hasRotator ? (
                 <>
-                  {t.hero.h1.before}
+                  {heroBefore}
                   <span className="relative inline-block overflow-hidden align-bottom" style={{ height: "1.15em" }}>
                     <AnimatePresence mode="wait">
                       <motion.span
@@ -402,12 +417,14 @@ export default function HomePage({
                         className="block"
                         style={{ color: heroHighlightIndex === 0 ? "#FFFFFF" : "#AAFF00" }}
                       >
-                        {heroHighlightIndex === 0 ? t.hero.h1.highlight : (t.hero.h1 as any).highlightAlt}
+                        {heroHighlightIndex === 0 ? heroKeyword : rotator.alt}
                       </motion.span>
                     </AnimatePresence>
                   </span>
-                  {t.hero.h1.after}
+                  {heroAfter}
                 </>
+              ) : (
+                heroTitleRaw
               )}
             </h1>
 
