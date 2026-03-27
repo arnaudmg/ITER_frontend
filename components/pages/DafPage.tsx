@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
-import { ArrowRight, ChevronDown, TrendingDown, Zap, Eye, Network, BarChart3, Wallet, Rocket, Settings, Compass } from "lucide-react";
+import { ArrowRight, ChevronDown, TrendingDown, Zap, Eye, Network, BarChart3, Wallet, Rocket, Settings, Compass, Clock, Users, Wrench, DollarSign } from "lucide-react";
 import Image from "next/image";
 import { Locale } from "@/lib/i18n";
 import type { CmsNavItem } from "@/lib/strapi";
@@ -214,6 +214,90 @@ export default function DafPage({
           </div>
         </div>
       </section>
+
+      {/* Pricing */}
+      <section className="bg-background py-24 lg:py-16">
+        <div className="container max-w-3xl">
+          <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
+            {locale === "fr" ? "Tarifs" : locale === "en" ? "Pricing" : "Tarifas"}
+          </span>
+          <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-6">
+            {t.pricing.heading}
+          </h2>
+          {t.pricing.content.map((p, i) => (
+            <p key={i} className="text-muted-foreground leading-relaxed mb-4">
+              {p}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      <div className="container">
+        <div className="border-b border-border/50" />
+      </div>
+
+      {/* When To Hire */}
+      <section className="bg-muted/30 py-24 lg:py-32">
+        <div className="container max-w-3xl">
+          <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
+            {locale === "fr" ? "Quand ?" : locale === "en" ? "When?" : "Cuando?"}
+          </span>
+          <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-6">
+            {t.whenToHire.heading}
+          </h2>
+          {t.whenToHire.content.map((p, i) => (
+            <p key={i} className="text-muted-foreground leading-relaxed mb-4">
+              {p}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      <div className="container">
+        <div className="border-b border-border/50" />
+      </div>
+
+      {/* Profiles */}
+      <section className="bg-background py-24 lg:py-16">
+        <div className="container max-w-3xl">
+          <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
+            {locale === "fr" ? "Profils" : locale === "en" ? "Profiles" : "Perfiles"}
+          </span>
+          <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-6">
+            {t.profiles.heading}
+          </h2>
+          {t.profiles.content.map((p, i) => (
+            <p key={i} className="text-muted-foreground leading-relaxed mb-4">
+              {p}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      <div className="container">
+        <div className="border-b border-border/50" />
+      </div>
+
+      {/* Tools */}
+      <section className="bg-muted/30 py-24 lg:py-32">
+        <div className="container max-w-3xl">
+          <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
+            {locale === "fr" ? "Outils" : locale === "en" ? "Tools" : "Herramientas"}
+          </span>
+          <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-6">
+            {t.tools.heading}
+          </h2>
+          {t.tools.content.map((p, i) => (
+            <p key={i} className="text-muted-foreground leading-relaxed mb-4">
+              {p}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      <div className="container">
+        <div className="border-b border-border/50" />
+      </div>
 
       {/* Related Services */}
       <section className="bg-muted/30 py-24 lg:py-32">
