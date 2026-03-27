@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ChevronDown, MapPin, Building2, Users, Briefcase, Phone } from "lucide-react";
+import { ArrowRight, ChevronDown, MapPin, Building2, Users, Briefcase, Phone, BarChart3, Wallet, Rocket, Compass, Network } from "lucide-react";
 import Image from "next/image";
 import { Locale } from "@/lib/i18n";
 import type { CmsNavItem } from "@/lib/strapi";
@@ -190,6 +190,77 @@ export default function DafLocalPage({
                   )}
                 </AnimatePresence>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Autres implantations - cross-linking */}
+      <section className="py-20 bg-muted/30">
+        <div className="container">
+          <h2 className="text-2xl lg:text-3xl font-bold font-heading text-foreground mb-8">
+            {locale === "fr" ? "Nos autres implantations" : locale === "en" ? "Our other locations" : "Nuestras otras sedes"}
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {([
+              { key: "barcelone", cityFr: "Barcelone", cityEn: "Barcelona", cityEs: "Barcelona", hrefFr: "/daf-externalise-barcelone", hrefEn: "/en/outsourced-cfo-barcelona", hrefEs: "/es/cfo-externalizado-barcelona" },
+              { key: "paris", cityFr: "Paris", cityEn: "Paris", cityEs: "Paris", hrefFr: "/daf-externalise-paris", hrefEn: "/en/outsourced-cfo-paris", hrefEs: "/es/cfo-externalizado-paris" },
+              { key: "toulouse", cityFr: "Toulouse", cityEn: "Toulouse", cityEs: "Toulouse", hrefFr: "/daf-externalise-toulouse", hrefEn: "/en/outsourced-cfo-toulouse", hrefEs: "/es/cfo-externalizado-toulouse" },
+            ] as const).filter((loc) => loc.key !== city).map((loc, i) => (
+              <Link
+                key={i}
+                href={locale === "fr" ? loc.hrefFr : locale === "en" ? loc.hrefEn : loc.hrefEs}
+                className="group flex items-center gap-4 bg-background border border-border/50 rounded-2xl p-6 hover:border-iter-violet/30 transition-all duration-300"
+              >
+                <div className="w-10 h-10 rounded-xl bg-iter-violet/10 flex items-center justify-center shrink-0 group-hover:bg-iter-violet/20 transition-colors">
+                  <MapPin size={20} className="text-iter-violet" />
+                </div>
+                <div>
+                  <span className="font-semibold text-foreground group-hover:text-iter-violet transition-colors block">
+                    {locale === "fr"
+                      ? `DAF externalis\u00e9 ${loc.cityFr}`
+                      : locale === "en"
+                        ? `Outsourced CFO ${loc.cityEn}`
+                        : `CFO externalizado ${loc.cityEs}`}
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    {locale === "fr" ? "D\u00e9couvrir" : locale === "en" ? "Learn more" : "Descubrir"}
+                  </span>
+                </div>
+                <ArrowRight size={16} className="ml-auto text-foreground/30 group-hover:text-iter-violet transition-all group-hover:translate-x-1" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services associes */}
+      <section className="py-20 bg-background">
+        <div className="container">
+          <h2 className="text-2xl lg:text-3xl font-bold font-heading text-foreground mb-8">
+            {locale === "fr" ? "Services associ\u00e9s" : locale === "en" ? "Related services" : "Servicios asociados"}
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { title: locale === "fr" ? "Lev\u00e9e de fonds" : locale === "en" ? "Fund-raising" : "Levantamiento de fondos", href: locale === "fr" ? "/services/accompagnement-levee-de-fond" : `/${locale}/services/fund-raising-support`, icon: Rocket },
+              { title: locale === "fr" ? "Contr\u00f4le de gestion" : locale === "en" ? "Management control" : "Control de gesti\u00f3n", href: locale === "fr" ? "/services/controle-de-gestion-externalise" : `/${locale}/services/outsourced-management-control`, icon: BarChart3 },
+              { title: locale === "fr" ? "Gestion de tr\u00e9sorerie" : locale === "en" ? "Cash flow management" : "Gesti\u00f3n de tesorer\u00eda", href: locale === "fr" ? "/services/previsionnel-tresorerie" : `/${locale}/services/cash-flow-forecast`, icon: Wallet },
+              { title: locale === "fr" ? "M&A & Due Diligence" : "M&A & Due Diligence", href: locale === "fr" ? "/services/ma-due-diligence" : `/${locale}/services/ma-due-diligence`, icon: Compass },
+              { title: locale === "fr" ? "DAF \u00e0 temps partag\u00e9" : locale === "en" ? "Part-time CFO" : "DAF a tiempo compartido", href: locale === "fr" ? "/daf-externalise/temps-partage" : `/${locale}/daf-externalise/temps-partage`, icon: Network },
+            ].map((service, i) => (
+              <Link
+                key={i}
+                href={service.href}
+                className="group flex items-center gap-4 bg-muted/30 border border-border/50 rounded-2xl p-6 hover:border-iter-violet/30 transition-all duration-300"
+              >
+                <div className="w-10 h-10 rounded-xl bg-iter-violet/10 flex items-center justify-center shrink-0 group-hover:bg-iter-violet/20 transition-colors">
+                  <service.icon size={20} className="text-iter-violet" />
+                </div>
+                <span className="font-semibold text-foreground group-hover:text-iter-violet transition-colors">
+                  {service.title}
+                </span>
+                <ArrowRight size={16} className="ml-auto text-foreground/30 group-hover:text-iter-violet transition-all group-hover:translate-x-1" />
+              </Link>
             ))}
           </div>
         </div>

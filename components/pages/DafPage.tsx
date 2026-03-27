@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
-import { ArrowRight, ChevronDown, TrendingDown, Zap, Eye, Network, BarChart3, Wallet, Rocket, Settings, Compass, Clock, Users, Wrench, DollarSign } from "lucide-react";
+import { ArrowRight, ChevronDown, TrendingDown, Zap, Eye, Network, BarChart3, Wallet, Rocket, Settings, Compass, Clock, Users, Wrench, DollarSign, MapPin } from "lucide-react";
 import Image from "next/image";
 import { Locale } from "@/lib/i18n";
 import type { CmsNavItem } from "@/lib/strapi";
@@ -329,6 +329,72 @@ export default function DafPage({
                   {service.title}
                 </span>
                 <ArrowRight size={16} className="ml-auto text-foreground/30 group-hover:text-iter-violet transition-all group-hover:translate-x-1" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Nos implantations */}
+      <section className="bg-background py-24 lg:py-32">
+        <div className="container">
+          <span className="text-xs font-semibold uppercase tracking-widest text-iter-violet mb-3 block">
+            {locale === "fr" ? "Nos implantations" : locale === "en" ? "Our locations" : "Nuestras sedes"}
+          </span>
+          <h2 className="text-2xl lg:text-3xl font-bold font-heading mb-4">
+            {locale === "fr"
+              ? "Un DAF externalis\u00e9 proche de chez vous"
+              : locale === "en"
+                ? "An outsourced CFO near you"
+                : "Un CFO externalizado cerca de usted"}
+          </h2>
+          <p className="text-muted-foreground leading-relaxed mb-10 max-w-2xl">
+            {locale === "fr"
+              ? "Iter Advisors intervient depuis ses bureaux de Barcelone, Paris et Toulouse. D\u00e9couvrez nos \u00e9quipes locales et les sp\u00e9cificit\u00e9s de chaque march\u00e9."
+              : locale === "en"
+                ? "Iter Advisors operates from its offices in Barcelona, Paris and Toulouse. Discover our local teams and the specificities of each market."
+                : "Iter Advisors opera desde sus oficinas en Barcelona, Par\u00eds y Toulouse. Descubra nuestros equipos locales y las especificidades de cada mercado."}
+          </p>
+          <div className="grid sm:grid-cols-3 gap-4">
+            {[
+              {
+                city: "Barcelone",
+                cityEn: "Barcelona",
+                cityEs: "Barcelona",
+                desc: locale === "fr" ? "Hub tech & startups internationales" : locale === "en" ? "Tech hub & international startups" : "Hub tech y startups internacionales",
+                href: locale === "fr" ? "/daf-externalise-barcelone" : locale === "en" ? "/en/outsourced-cfo-barcelona" : "/es/cfo-externalizado-barcelona",
+              },
+              {
+                city: "Paris",
+                cityEn: "Paris",
+                cityEs: "Paris",
+                desc: locale === "fr" ? "Si\u00e8ges sociaux & scale-ups" : locale === "en" ? "Headquarters & scale-ups" : "Sedes sociales y scale-ups",
+                href: locale === "fr" ? "/daf-externalise-paris" : locale === "en" ? "/en/outsourced-cfo-paris" : "/es/cfo-externalizado-paris",
+              },
+              {
+                city: "Toulouse",
+                cityEn: "Toulouse",
+                cityEs: "Toulouse",
+                desc: locale === "fr" ? "A\u00e9ronautique, sant\u00e9 & industrie" : locale === "en" ? "Aerospace, health & industry" : "Aeron\u00e1utica, salud e industria",
+                href: locale === "fr" ? "/daf-externalise-toulouse" : locale === "en" ? "/en/outsourced-cfo-toulouse" : "/es/cfo-externalizado-toulouse",
+              },
+            ].map((loc, i) => (
+              <Link
+                key={i}
+                href={loc.href}
+                className="group flex flex-col gap-3 bg-muted/30 border border-border/50 rounded-2xl p-6 hover:border-iter-violet/30 transition-all duration-300"
+              >
+                <div className="w-10 h-10 rounded-xl bg-iter-violet/10 flex items-center justify-center shrink-0 group-hover:bg-iter-violet/20 transition-colors">
+                  <MapPin size={20} className="text-iter-violet" />
+                </div>
+                <span className="font-semibold text-lg text-foreground group-hover:text-iter-violet transition-colors">
+                  {locale === "en" ? loc.cityEn : locale === "es" ? loc.cityEs : loc.city}
+                </span>
+                <span className="text-sm text-muted-foreground">{loc.desc}</span>
+                <span className="text-sm font-medium text-iter-violet flex items-center gap-1 mt-auto">
+                  {locale === "fr" ? "D\u00e9couvrir" : locale === "en" ? "Learn more" : "Descubrir"}
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                </span>
               </Link>
             ))}
           </div>

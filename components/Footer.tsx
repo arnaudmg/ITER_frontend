@@ -83,18 +83,14 @@ export default function Footer({ locale }: { locale: Locale }) {
               {locale === "fr" ? "Nos bureaux" : locale === "en" ? "Our offices" : "Nuestras oficinas"}
             </h4>
             <div className="space-y-3">
-              {[
-                { city: "Barcelone", country: "Espagne" },
-                { city: "Paris", country: "France" },
-                { city: "Toulouse", country: "France" },
-              ].map((loc) => (
-                <div key={loc.city} className="flex items-start gap-2">
+              {content.locations.map((loc) => (
+                <Link key={loc.city} href={loc.href} className="flex items-start gap-2 group">
                   <MapPin size={14} className="text-iter-chartreuse mt-0.5 shrink-0" />
                   <div>
-                    <span className="text-white/70 text-sm block">{loc.city}</span>
+                    <span className="text-white/70 text-sm block group-hover:text-iter-chartreuse transition-colors">{loc.city}</span>
                     <span className="text-white/40 text-xs">{loc.country}</span>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
             <div className="flex items-center gap-4 mt-4">

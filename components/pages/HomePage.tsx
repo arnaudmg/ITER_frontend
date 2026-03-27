@@ -655,14 +655,23 @@ export default function HomePage({
                   </motion.div>
                 ))}
               </div>
-              <Link
-                href={BOOKING_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-iter-violet text-white font-semibold hover:shadow-lg hover:shadow-iter-violet/20 transition-all duration-300"
-              >
-                {t.dafSection.cta}
-              </Link>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={BOOKING_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-iter-violet text-white font-semibold hover:shadow-lg hover:shadow-iter-violet/20 transition-all duration-300"
+                >
+                  {t.dafSection.cta}
+                </Link>
+                <Link
+                  href={locale === "fr" ? "/daf-externalise" : locale === "en" ? "/en/daf-outsourcing" : "/es/externalizacion-daf"}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full border border-iter-violet text-iter-violet font-semibold hover:bg-iter-violet/5 transition-all duration-300"
+                >
+                  {locale === "fr" ? "En savoir plus" : locale === "en" ? "Learn more" : "Saber m\u00e1s"}
+                  <ArrowRight size={16} />
+                </Link>
+              </div>
             </motion.div>
           </div>
         </div>
